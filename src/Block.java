@@ -1,12 +1,18 @@
 import java.util.HashMap;
+import java.util.LinkedList;
 
 
-public class Block {
+public abstract class Block {
 
     Block parent;
     HashMap<String, String> localVariables;
-    public Block(Block parent){
+    LinkedList<String> lines;
+
+    public Block(Block parent, LinkedList<String> lines, LinkedList<String> variables){
         this.parent = parent;
-        localVariables = new HashMap<>();
+        localVariables = VariableFactory(variables);
+        this.lines = lines;
     }
+
+
 }
