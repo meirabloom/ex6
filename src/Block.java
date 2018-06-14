@@ -5,12 +5,14 @@ import java.util.LinkedList;
 public abstract class Block {
 
     Block parent;
-    HashMap<String, String> localVariables;
+    HashMap<String, Variable> localVariables;
     LinkedList<String> lines;
+
 
     public Block(Block parent, LinkedList<String> lines, LinkedList<String> variables){
         this.parent = parent;
-        localVariables = VariableFactory(variables);
+        VariableFactory varFactory = new VariableFactory(variables);
+        localVariables = varFactory.getVariables();
         this.lines = lines;
     }
 
