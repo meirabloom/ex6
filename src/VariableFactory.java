@@ -22,13 +22,8 @@ public class VariableFactory {
                 throw new sJavaException("Unassigned final variable");
             }
             String[] splitLine = var.split(" ");
-            LinkedList<String> lineElement = new LinkedList<String>();
-            for(String elem:splitLine){
-                if(elem!=null){
-                    lineElement.add(elem);
-                }
-            }
-            String type = lineElement.getFirst();
+
+            String type = splitLine[0];
             String name = splitLine[1];
             if (var.contains(",")) {
                 handleMiltpuleVars(var); // possibly multiple vars
