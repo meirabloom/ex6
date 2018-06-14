@@ -16,19 +16,7 @@ public class VariableFactory {
         for (String var: strVars) {
             boolean finalVar = isFinal(var);
             String type = getType(var);
-            switch (type){
-                case(): // int
 
-                case(): // double
-
-                case(): // String
-
-                case(): // boolean
-
-                case(): //char
-
-                default: // illegal type
-            }
         }
     }
 
@@ -40,23 +28,36 @@ public class VariableFactory {
 
     private boolean isFinal(String var){ return var.startsWith("final "); }
 
-    boolean checkAssignment(String var){ return var.contains("=");}
+    private boolean checkAssignment(String var){ return var.contains("=");}
 
+    /**
+     * Gets line, finds variables name ans checks if it is legal.
+     * @param var
+     * @return
+     */
+    private String checkName(String var){
+
+    }
     /**
      * Check if there are more then one variables declared in one line, if so splits line and adds both to
      * list of vars.
      * @param line - line in which there night be more then one var  declared.
+     * @return true if there multipule vars that were created succesfully, false otherwise.
      */
-    void checkMiltpuleVars(String line){
+    private boolean checkMiltpuleVars(String line){
         if(line.contains(",")){
+
             String type = getType(line);
             String[] vars = line.split(",");
             for (String var: vars){
-                // create new variable with type "type"
+                String name ;
+                Variable newVar = new Variable(type,name,checkAssignment(var),isFinal(var));
+                variables.put(name,newVar);
             }
 
         }
     }
+
 
 
 
