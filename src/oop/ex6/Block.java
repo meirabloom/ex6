@@ -10,6 +10,13 @@ public abstract class Block {
     HashMap<String, Variable> localVariables;
     LinkedList<String> lines;
 
+    /**
+     * a constructor of a parentless block (the global block)
+     */
+    public Block(LinkedList<String> lines){ //TODO deal with global variables
+        this.parent = null;
+        this.lines = lines;
+    }
 
     public Block(Block parent, LinkedList<String> lines, LinkedList<String> variables){
         this.parent = parent;
