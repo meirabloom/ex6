@@ -1,3 +1,5 @@
+package oop.ex6;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 

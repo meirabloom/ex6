@@ -1,3 +1,4 @@
+package oop.ex6;
 
 public class sJavaException extends Exception {
 
