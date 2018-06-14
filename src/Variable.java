@@ -4,6 +4,7 @@ public class Variable {
     String name;
     boolean assigned;
     boolean isFinal;
+    boolean isGlobal;
 
     Variable(String type, String name, boolean assigned, boolean isFinal){
         this.varType = type;
