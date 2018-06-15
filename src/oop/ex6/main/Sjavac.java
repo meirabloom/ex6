@@ -1,6 +1,6 @@
 package oop.ex6.main;
 
-import oop.ex6.FirstParser;
+import oop.ex6.InitialParser;
 
 import java.io.*;
 
@@ -19,7 +19,7 @@ public class Sjavac {
         try {
             File file = new File(args[0]);
             BufferedReader br = new BufferedReader(new FileReader(file));
-            FirstParser firstParser = new FirstParser(file);
+            InitialParser firstParser = new InitialParser(file);
         } //TODO add the rest of the options
         catch (FileNotFoundException e) {
             System.out.println(IO_ERRORS);

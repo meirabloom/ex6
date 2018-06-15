@@ -9,7 +9,7 @@ import java.util.LinkedList;
 /**
  * receives a file and adds each relevant string line to a list
  */
-public class FirstParser {
+public class InitialParser {
 
     // a list that holds all the relevant lines of the text
     private LinkedList<String> globalList;
@@ -22,7 +22,7 @@ public class FirstParser {
      * constructor
      * @param file - the file to parse
      */
-    public FirstParser(File file){
+    public InitialParser(File file){
         globalList = new LinkedList<>();
     }
 

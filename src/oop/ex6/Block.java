@@ -10,6 +10,13 @@ public abstract class Block {
     HashMap<String, Variable> localVariables;
     LinkedList<String> lines;
 
+    //constructors
+
+    /**
+     * default constructor
+     */
+    Block(){}
+
     /**
      * a constructor of a parentless block (the global block)
      */
