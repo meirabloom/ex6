@@ -13,10 +13,7 @@ public class temp {
             s.add("final int a=9;");
             s.add("int k = 8;");
             s.add("double a = 8.9086;");
-            //s.add("int a = 8;");
 
-            //  s.add("double b = 5.9;");
-            //s.add("char t = ''c''");
             VariableFactory vf = new VariableFactory(s, null);
             HashMap<String, Variable> t = vf.getVariables();
             System.out.println(t.toString());
