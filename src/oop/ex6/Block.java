@@ -18,9 +18,15 @@ public abstract class Block {
         this.lines = lines;
     }
 
-    public Block(Block parent, LinkedList<String> lines, LinkedList<String> variables){
+    /**
+     * constructor
+     * @param parent - the block in which this block is nested
+     * @param lines - the lines which make the block
+     * @param globalVariables - the variables that are global to this block
+     */
+    public Block(Block parent, LinkedList<String> lines, LinkedList<String> globalVariables){
         this.parent = parent;
-        VariableFactory varFactory = new VariableFactory(variables);
+        VariableFactory varFactory = new VariableFactory(globalVariables);
         localVariables = varFactory.getVariables();
         this.lines = lines;
     }
