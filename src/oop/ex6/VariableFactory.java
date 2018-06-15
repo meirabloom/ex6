@@ -62,7 +62,7 @@ public class VariableFactory {
      * @param line - line in which there night be more then one var  declared.
      * @return true if there multipule vars that were created succesfully, false otherwise.
      */
-    private boolean handleMiltpuleVars(String line){
+    private boolean handleMultipleVars(String line){
         {
             String[] vars = line.split(",");
 
