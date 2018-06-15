@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public abstract class Block {
 
     Block parent;
-    HashMap<String, Variable> localVariables;
+   // HashMap<String, Variable> localVariables;
     LinkedList<String> lines;
 
 

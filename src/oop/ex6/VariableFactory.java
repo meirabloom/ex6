@@ -14,14 +14,14 @@ public class VariableFactory {
     private static final String STR_PATTERN = "\"[a-zA-Z]+\"";
     private static final String CHAR_PATTERN = "\"[a-zA-Z]\"";
     private static final String NAME_PATTERN = "[^\\d\\s]\\S*";
-   // private static final String ASSIGNED_PATTERN = "(\\w+)\\s*(=)\\s*(.*)";
-    private static final String ASSIGNED_PATTERN = "(a)(=)(9)";
+    //private static final String ASSIGNED_PATTERN = ".*";
+    private static final String ASSIGNED_PATTERN = "(\\w+)\\s*(=)\\s*(.*)";
     private static final boolean UNASSIGNED = false;
     private static final boolean ASSIGNED = true;
     private static final int NAME_PLACE = 1;
     private static final int TYPE_PLACE = 2;
     private static final int REST_OF_ELEMENTS_PLACE = 3;
-    private static final int VALUE_PLACE = 5;
+    private static final int VALUE_PLACE = 3;
 
 
 
@@ -32,6 +32,7 @@ public class VariableFactory {
     VariableFactory (LinkedList<String> strVars, LinkedList<String> globalVars){
         this.strVars = strVars;
         this.globalVars = globalVars;
+        this.variables = new HashMap<String,Variable>();
     }
 
     public HashMap<String, Variable> getVariables() throws sJavaException {
@@ -47,8 +48,11 @@ public class VariableFactory {
             for (String oneVar : allVarsInLine) {
                 Pattern assignedPattern = Pattern.compile(ASSIGNED_PATTERN);
                 Matcher newMatcher  = assignedPattern.matcher(oneVar);
-              //  m = assignedPattern.matcher(oneVar);
-                String name = newMatcher.group(NAME_PLACE).trim();
+                if (newMatcher.matches()) {
+
+                    //  m = assignedPattern.matcher(oneVar);
+                    String name = newMatcher.group(NAME_PLACE).trim();
+
                 if (!checkName(name)) {
                     throw new sJavaException("illegal name");
                 }
@@ -65,6 +69,7 @@ public class VariableFactory {
                     Variable newVar = new Variable(type, name, UNASSIGNED, isFinal(var), null);
                     variables.put(name, newVar);
                 }
+                }
             }
         }
         return variables;
@@ -78,15 +83,21 @@ public class VariableFactory {
      * @param
      * @return
      */
-    private boolean checkName(String name){
+    private boolean checkName(String name) {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
-        if(namePattern.matcher(name).matches() && !name.equals("_") && !variables.containsKey(name)){
-            for(String globalVar:globalVars){
-                if(name.equals(globalVar)){
-                    return false;
+        if (namePattern.matcher(name).matches() && !name.equals("_") && !variables.containsKey(name)) {
+     //     if (namePattern.matcher(name).matches()) {
+
+                if (globalVars != null) {
+                for (String globalVar : globalVars) {
+                    if (name.equals(globalVar)) {
+                        return false;
+                    }
                 }
-            } return true;
-        } return false;
+            }
+            return true;
+        }
+            return false;
     }
 
     /**
