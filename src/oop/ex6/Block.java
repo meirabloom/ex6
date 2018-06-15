@@ -33,8 +33,8 @@ public abstract class Block {
      */
     public Block(Block parent, LinkedList<String> lines, LinkedList<String> globalVariables){
         this.parent = parent;
-        VariableFactory varFactory = new VariableFactory(globalVariables);
-        localVariables = varFactory.getVariables();
+       // VariableFactory varFactory = new VariableFactory(globalVariables);
+       // localVariables = varFactory.getVariables();
         this.lines = lines;
     }
 

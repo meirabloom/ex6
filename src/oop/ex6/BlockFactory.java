@@ -35,11 +35,11 @@ public class BlockFactory {
     public Block createBlock(String type, LinkedList blockLines , Block parentBlock){ //TODO exceptions
         switch (type){
             case METHOD:
-                return new MethodBlock(); //TODO what paramaters do these objects receive?
+                return null;//new MethodBlock(); //TODO what paramaters do these objects receive?
             case WHILE:
-                return new WhileBlock();
+                return  null;//  new WhileBlock();
             case IF:
-                return new IfBlock();
+                return null;// new IfBlock();
             default:
                 return null;
         }
