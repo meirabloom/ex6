@@ -18,7 +18,6 @@ public class temp {
             HashMap<String, Variable> t = vf.getVariables();
             System.out.println(t.toString());
 
-
         } catch (sJavaException s) {
             System.out.println("error");
         }
