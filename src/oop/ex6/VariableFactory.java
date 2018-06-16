@@ -49,8 +49,6 @@ public class VariableFactory {
                 Pattern assignedPattern = Pattern.compile(ASSIGNED_PATTERN);
                 Matcher newMatcher  = assignedPattern.matcher(oneVar);
                 if (newMatcher.matches()) {
-
-                    //  m = assignedPattern.matcher(oneVar);
                     String name = newMatcher.group(NAME_PLACE).trim();
 
                 if (!checkName(name)) {
