@@ -30,6 +30,22 @@ public class MethodBlock extends Block{
         super(parent, lines, globalVariables, methods, localVariable);
     }
 
+
+    /**
+     * @return an array of the methods parameters
+     */
+    private String[] getMethodParams() {
+        String[] paramArray = lines.getFirst().split(",");
+        for (int i =0; i < paramArray.length; i++) {
+            paramArray[i] = paramArray[i].trim();
+        }
+        return paramArray;
+    }
+    /**
+     * checks if the method ends with a return statement and curly brackets
+     * @return true if the method ends properly
+     * @throws sJavaException - an exception thrown if the method ends illegally
+     */
     boolean checkMethodEnding() throws sJavaException {
         Pattern endPattern = Pattern.compile(END_METHOD_SIGNATURE);
         Matcher m = endPattern.matcher(lines.getLast());
@@ -39,6 +55,7 @@ public class MethodBlock extends Block{
         if (!m.matches()) {
             throw new sJavaException(MISSING_BRACKET);
         }
+        return true;
     }
 
 
