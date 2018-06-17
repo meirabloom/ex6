@@ -3,6 +3,7 @@ package oop.ex6;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -13,23 +14,25 @@ public class BlockFactory {
     /** the array containing the blocks */
     ArrayList<Block> blockList = new ArrayList<>();
 
-    //block types
+    //constants
     static final String METHOD = "method";
     static final String WHILE = "while";
     static final String IF = "if";
-
-    //regex
     static final String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*+\\((.)\\)\\s{";
+    static final String ASSIGNMENT = "=";
+    static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
 
 
-    /**
-     * iterates over the list of lines and creates the block objects, adding each block to the list of blocks
-     */
-    public void parseBlocks() { //TODO
-
-
+    private String[] parseMethodParams(String parameterLine) throws sJavaException {
+        String[] paramArray = parameterLine.split(",");
+        for (int i =0; i < paramArray.length; i++) {
+            paramArray[i] = paramArray[i].trim() + ";";
+            if (paramArray[i].contains(ASSIGNMENT)) {
+                throw new sJavaException(METHOD_PARAMETER_EXCEPTION_MSG);
+            }
+        }
+        return paramArray;
     }
-
     /**
      *
      * @param type - the type of the block: method, if or while
@@ -37,9 +40,13 @@ public class BlockFactory {
      * @param parentBlock - the scope in which this block is nested
      * @return - the new block object according to its type
      */
-    public Block createBlock(String type, LinkedList blockLines , Block parentBlock){ //TODO exceptions
+    public Block createBlock(String type, String line, LinkedList blockLines , Block parentBlock)
+            throws sJavaException { //TODO
+        // exceptions
         switch (type){
             case METHOD:
+                String[] params = parseMethodParams(line);
+
                 // Parmaters = group(3)
                 // Hash p = VariableFactory(parameters)
                 return null;//new MethodBlock(); //TODO what paramaters do these objects receive?

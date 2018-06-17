@@ -25,11 +25,11 @@ public class VariableFactory {
 
 
 
-    LinkedList<String> strVars;
+    String[] strVars;
     HashMap<String, Variable> variables;
     LinkedList<Variable> globalVars; //??
     Matcher m;
-    VariableFactory (LinkedList<String> strVars, LinkedList<Variable> globalVars){
+    VariableFactory (String[] strVars, LinkedList<Variable> globalVars){
         this.strVars = strVars;
         this.globalVars = globalVars;
         this.variables = new HashMap<String,Variable>();
