@@ -59,7 +59,8 @@ public class VariableFactory {
                         if (!checkValue(type, newMatcher.group(VALUE_PLACE).trim())) {
                             throw new sJavaException("incompatible value");
                         }
-                        Variable newVar = new Variable(type, name, ASSIGNED, isFinal, newMatcher.group(VALUE_PLACE));
+                        Variable newVar = new Variable(type, name, ASSIGNED, isFinal,
+                                newMatcher.group(VALUE_PLACE));
                         variables.put(name, newVar);
                     }else { // oneVar is not assigned
                         if (isFinal) {

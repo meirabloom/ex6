@@ -38,13 +38,6 @@ public abstract class Block {
         this.lines = lines;
     }
 
-    /**
-     * searches the block for the its local variables. if the variable name is already assigned to a global
-     * variable, an exception is thrown
-     */
-    public abstract void setVariables() throws sJavaException;
-
-
 
 
 }

@@ -18,10 +18,15 @@ public class BlockFactory {
     static final String WHILE = "while";
     static final String IF = "if";
 
+    //regex
+    static final String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*+\\((.)\\)\\s{";
+
+
     /**
      * iterates over the list of lines and creates the block objects, adding each block to the list of blocks
      */
     public void parseBlocks() { //TODO
+
 
     }
 
