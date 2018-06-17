@@ -40,6 +40,8 @@ public class BlockFactory {
     public Block createBlock(String type, LinkedList blockLines , Block parentBlock){ //TODO exceptions
         switch (type){
             case METHOD:
+                // Parmaters = group(3)
+                // Hash p = VariableFactory(parameters)
                 return null;//new MethodBlock(); //TODO what paramaters do these objects receive?
             case WHILE:
                 return  null;//  new WhileBlock();

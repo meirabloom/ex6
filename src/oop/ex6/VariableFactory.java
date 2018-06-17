@@ -115,7 +115,7 @@ public class VariableFactory {
 
         switch (type){
             case("boolean"):
-                return (value.equals("true") || value.equals("false"));
+                return (value.equals("true") || value.equals("false")); //TODO: OR INT
             case("int"):
                 return (intPattern.matcher(value).matches());
             case("double"):
