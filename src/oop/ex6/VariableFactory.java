@@ -35,6 +35,7 @@ public class VariableFactory {
         this.variables = new HashMap<String,Variable>();
     }
 
+
     public HashMap<String, Variable> getVariables() throws sJavaException {
         for (String var : strVars) {
             Pattern general = Pattern.compile(LEGAL_PATTERN);
