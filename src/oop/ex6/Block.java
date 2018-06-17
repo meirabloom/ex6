@@ -9,6 +9,9 @@ public abstract class Block {
     Block parent;
     HashMap<String, Variable> localVariables;
     LinkedList<String> lines;
+    LinkedList<Variable> globalVariables;
+    LinkedList<Block> methods;
+
 
     //constructors
 
@@ -31,7 +34,8 @@ public abstract class Block {
      * @param lines - the lines which make the block
      * @param globalVariables - the variables that are global to this block
      */
-    public Block(Block parent, LinkedList<String> lines, LinkedList<String> globalVariables){
+    public Block(Block parent, LinkedList<String> lines, LinkedList<Variable> globalVariables,
+                 LinkedList<Block> methods){
         this.parent = parent;
        // VariableFactory varFactory = new VariableFactory(globalVariables);
        // localVariables = varFactory.getVariables();

@@ -13,6 +13,7 @@ public class temp {
             s.add("final int a=9;");
             s.add("int k = 8;");
             s.add("double a = 8.9086;");
+            String s = "(void)\\s+([a-zA-z]\\w*)\\s*+\\((.*)\\)\\s*{";
 
             VariableFactory vf = new VariableFactory(s, null);
             HashMap<String, Variable> t = vf.getVariables();

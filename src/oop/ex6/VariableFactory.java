@@ -88,7 +88,7 @@ public class VariableFactory {
         if (namePattern.matcher(name).matches() && !name.equals("_") && !variables.containsKey(name)) {
             //     if (namePattern.matcher(name).matches()) {
 
-            if (globalVars != null) {
+            if (globalVars != null) { // TODO: DELETE THIS PART
                 for (String globalVar : globalVars) {
                     if (name.equals(globalVar)) {
                         return false;
@@ -107,7 +107,7 @@ public class VariableFactory {
      * @return true if the type is compatible, false otherwise.
      * @throws sJavaException - if the type is unrecognized
      */
-    private boolean checkValue(String type, String value) throws sJavaException{
+    private boolean checkValue(String type, String value) throws sJavaException{ //TODO: check if val exists
         Pattern doublePattern = Pattern.compile(DOUBLE_PATTERN);
         Pattern intPattern = Pattern.compile(INT_PATTERN);
         Pattern strPattern = Pattern.compile(STR_PATTERN);
