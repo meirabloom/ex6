@@ -27,9 +27,9 @@ public class VariableFactory {
 
     LinkedList<String> strVars;
     HashMap<String, Variable> variables;
-    LinkedList<String> globalVars; //??
+    LinkedList<Variable> globalVars; //??
     Matcher m;
-    VariableFactory (LinkedList<String> strVars, LinkedList<String> globalVars){
+    VariableFactory (LinkedList<String> strVars, LinkedList<Variable> globalVars){
         this.strVars = strVars;
         this.globalVars = globalVars;
         this.variables = new HashMap<String,Variable>();
@@ -89,7 +89,7 @@ public class VariableFactory {
             //     if (namePattern.matcher(name).matches()) {
 
             if (globalVars != null) { // TODO: DELETE THIS PART
-                for (String globalVar : globalVars) {
+                for (Variable globalVar : globalVars) {
                     if (name.equals(globalVar)) {
                         return false;
                     }

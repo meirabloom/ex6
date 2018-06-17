@@ -26,6 +26,8 @@ public abstract class Block {
     public Block(LinkedList<String> lines){ //TODO deal with global variables
         this.parent = null;
         this.lines = lines;
+        this.methods = new LinkedList<Block>();
+        this.globalVariables = new LinkedList<Variable>();
     }
 
     /**
@@ -35,11 +37,13 @@ public abstract class Block {
      * @param globalVariables - the variables that are global to this block
      */
     public Block(Block parent, LinkedList<String> lines, LinkedList<Variable> globalVariables,
-                 LinkedList<Block> methods){
+                 LinkedList<Block> methods, LinkedList<String> localVariable) throws sJavaException{
         this.parent = parent;
-       // VariableFactory varFactory = new VariableFactory(globalVariables);
-       // localVariables = varFactory.getVariables();
         this.lines = lines;
+        VariableFactory factory = new VariableFactory(localVariable, globalVariables);
+        this. localVariables = factory.getVariables();
+        this.methods = methods;
+        this.globalVariables = globalVariables;
     }
 
 
