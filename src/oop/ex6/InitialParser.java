@@ -22,17 +22,17 @@ public class InitialParser {
      * constructor
      * @param file - the file to parse
      */
-    public InitialParser(File file){
+    public InitialParser(File file) throws IOException {
         globalList = new LinkedList<>();
+        addLines(file);
     }
 
     /**
      *
      * @param file - the file to parse
-     * @return a list of strings, each string is a line of code (and not an empty line or comment line)
      * @throws IOException - if the file is not readable
      */
-    LinkedList<String> addLines(File file) throws IOException { //TODO - specify the exception+message
+    private void addLines(File file) throws IOException { //TODO - specify the exception+message
         try {
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -47,11 +47,12 @@ public class InitialParser {
         catch (IOException e) {
             throw new IOException(); //TODO specify a message
         }
-        return globalList;
     }
 
-
-
-
-
+    /**
+     * @return - the linked list containing the lines of the code
+     */
+    public LinkedList<String> getLines() {
+        return globalList;
+    }
 }
