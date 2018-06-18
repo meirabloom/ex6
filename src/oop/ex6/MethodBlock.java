@@ -16,7 +16,7 @@ public class MethodBlock extends Block{
     private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
 
     private String[] paramTypes;
-    private String mathodName;
+    private String methodName;
 
     /**
      * constructor
@@ -67,7 +67,7 @@ public class MethodBlock extends Block{
 
     public String[] getParamTypes(){ return paramTypes;}
 
-    public String getMethodName(){return mathodName;}
+    public String getMethodName(){return methodName;}
 
 
 
