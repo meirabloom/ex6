@@ -15,21 +15,20 @@ public class MethodBlock extends Block{
     private static final String RETURN_SIGNATURE = "return;";
     private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
 
-    String[] paramTypes;
+    private String[] paramTypes;
+    private String mathodName;
 
     /**
      * constructor
      * @param parent - the global block in which the method is nested
      * @param lines
-     * @param methods
      * @param localVariable
      * @throws sJavaException
      */
-    MethodBlock(Block parent, LinkedList<String> lines,
-                LinkedList<String> methods, LinkedList<String> localVariable) throws sJavaException {
-        super(parent, lines, methods, localVariable);
+    MethodBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable) throws sJavaException {
+        super(parent, lines, localVariable);
         checkMethodEnding();
-        extractMethodParams();
+        extractMethodComponents();
     }
 
     @Override
@@ -38,9 +37,10 @@ public class MethodBlock extends Block{
     }
 
     /**
+     * Sets method na
      * @return an array of the methods parameters
      */
-    private void extractMethodParams() { // TODO: finish this method (does not work atm)
+    private void extractMethodComponents() { // TODO: name, type array, check params
         String[] paramArray = lines.getFirst().split(",");
         for (int i =0; i < paramArray.length; i++) {
             paramArray[i] = paramArray[i].trim();
@@ -66,6 +66,8 @@ public class MethodBlock extends Block{
     }
 
     public String[] getParamTypes(){ return paramTypes;}
+
+    public String getMethodName(){return mathodName;}
 
 
 

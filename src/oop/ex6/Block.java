@@ -36,8 +36,7 @@ public abstract class Block {
      * @param lines - the lines which make the block
      * @param globalVariables - the variables that are global to this block
      */
-    public Block(Block parent, LinkedList<String> lines,
-                 LinkedList<String> methods, LinkedList<String> localVariable) throws sJavaException{
+    public Block(Block parent, LinkedList<String> lines, LinkedList<String> localVariable) throws sJavaException{
         this.parent = parent;
         this.lines = lines;
         VariableFactory factory = new VariableFactory(localVariable, globalVariables);

@@ -18,7 +18,7 @@ public class BlockParser {
 
     private LinkedList<String> innerBlockLines = new LinkedList<String>();
     private LinkedList<String> variables = new LinkedList<String>();
-    private LinkedList<String> methods = new LinkedList<String>();
+    private LinkedList<MethodBlock> methods = new LinkedList<MethodBlock>();
     private Matcher m;
 
     private int blockCounter = 0;
@@ -68,7 +68,6 @@ public class BlockParser {
                 }
                 blockCounter++;
                 innerBlockLines.add(line);
-                methods.add(line); //TODO add another method of methodInit() that will add method NAME to gloabal list and ??
                 break;
 
             case IF_WHILE_BLOCK_LINE:
@@ -80,13 +79,12 @@ public class BlockParser {
                 break;
 
             case METHOD_CALL_LINE:
+                if(block.getName().equals("global")){
+                    throw new sJavaException("Method call in global scope");
+                }
                 if(blockCounter==0){
-                    if(block.getName().equals("global")){
-                        // TODO: ?
+                    // TODO checkMethodCall();
 
-                    }else {
-                        // TODO: CheckMethodCall();
-                    }
                 }else{
                     innerBlockLines.add(line);
                 }
@@ -111,10 +109,12 @@ public class BlockParser {
                 if(blockCounter==0){
                     if(block.getName().equals("global")) {
                         //global scope only has nested method blocks, no if\while blocks
-                        blocksToRead.add(new MethodBlock(block, innerBlockLines, methods, variables));
+                        MethodBlock newMethod = new MethodBlock(block, innerBlockLines, variables);
+
+                        blocksToRead.add(newMethod);
+                        methods.add(newMethod);
                     } else {
-                        blocksToRead.add(new ConditionBlock(block, innerBlockLines, methods, variables));
-                        //TODO: who needs to know global var/ methods??
+                        blocksToRead.add(new ConditionBlock(block, innerBlockLines, variables));
                     }
                     innerBlockLines.clear();
                     variables.clear();
@@ -137,10 +137,16 @@ public class BlockParser {
         }else{
             throw new sJavaException("illegal method call");
         }
-        if(!methods.contains(methodName)){
-            throw new sJavaException("call to undefined method");
+        for(MethodBlock method: methods){
+            if(methods.contains(methodName)){
+                throw new sJavaException("call to undefined method");
+            }
         }
-        String[] allParams = parseMethodParams(params);
+
+        String[] allParams = parseMethodCallParams(params); // will return a list of all parameters
+        for(int i=0; i<allParams.length; i++){
+            // checkParam( ,  : will check if it is initialized and if it is the right type
+        }
 
 
 
@@ -153,7 +159,7 @@ public class BlockParser {
      * @return paramArray - list of seperated parameters
      * @throws sJavaException - if the prameters are assigned
      */
-    private String[] parseMethodParams(String parameterLine) throws sJavaException {
+    private String[] parseMethodCallParams(String parameterLine) throws sJavaException {
         String[] paramArray = parameterLine.split(",");
         for (int i =0; i < paramArray.length; i++) {
             paramArray[i] = paramArray[i].trim() + ";";
