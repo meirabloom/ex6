@@ -41,13 +41,14 @@ public class MethodBlock extends Block{
      * @return an array of the methods parameters
      */
     private void extractMethodComponents() { // TODO: name, type array, check params
-        String[] paramArray = lines.getFirst().split(",");
-        for (int i =0; i < paramArray.length; i++) {
-            paramArray[i] = paramArray[i].trim();
-            String[] paramElements = paramArray[i].split(" ");
-            paramArray[i] = paramArray[i].trim();
-        }
-        paramTypes =  paramArray;
+
+//        String[] paramArray = lines.getFirst().split(",");
+//        for (int i =0; i < paramArray.length; i++) {
+//            paramArray[i] = paramArray[i].trim();
+//            String[] paramElements = paramArray[i].split(" ");
+//            paramArray[i] = paramArray[i].trim();
+//        }
+//        paramTypes =  paramArray;
     }
 
     /**
