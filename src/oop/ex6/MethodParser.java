@@ -12,7 +12,6 @@ public class MethodParser {
     private Matcher m;
 
 
-
     private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     private static final String ASSIGNMENT = "=";
     private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";

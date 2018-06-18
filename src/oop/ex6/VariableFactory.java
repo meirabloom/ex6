@@ -9,11 +9,12 @@ import java.util.regex.Pattern;
 public class VariableFactory {
 
     private static final String LEGAL_PATTERN = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
-    private static final String DOUBLE_PATTERN = "\\d+\\.?\\d?";
+    private static final String DOUBLE_PATTERN = "\\d+\\.?\\d*";
     private static final String INT_PATTERN = "\\d+";
     private static final String STR_PATTERN = "\"[a-zA-Z]+\"";
     private static final String CHAR_PATTERN = "\"[a-zA-Z]\"";
     private static final String NAME_PATTERN = "[^\\d\\s]\\S*";
+    private static final String NEW_VAL_PATTERN = "(\\d+\\.?\\d*)|(\"[a-zA-Z]+\")";
     //private static final String ASSIGNED_PATTERN = ".*";
     private static final String ASSIGNED_PATTERN = "(\\w+)\\s*(=)\\s*(.*)";
     private static final boolean UNASSIGNED = false;
@@ -25,14 +26,20 @@ public class VariableFactory {
 
 
 
-    String[] strVars;
-    HashMap<String, Variable> variables;
-    LinkedList<Variable> globalVars; //??
-    Matcher m;
-    VariableFactory (String[] strVars, LinkedList<Variable> globalVars){ //Also receive
+    private LinkedList<String> strVars;
+    private HashMap<String, Variable> variables;
+    private Block block;
+    private Matcher m;
+
+    /**
+     * Constructor
+     * @param strVars
+     * @param block
+     */
+    VariableFactory (LinkedList<String> strVars, Block block){
         this.strVars = strVars;
-        this.globalVars = globalVars;
         this.variables = new HashMap<String,Variable>();
+        this.block = block;
     }
 
 
@@ -90,15 +97,6 @@ public class VariableFactory {
     private boolean checkName(String name) {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
         if (namePattern.matcher(name).matches() && !name.equals("_") && !variables.containsKey(name)) {
-            //     if (namePattern.matcher(name).matches()) {
-
-            if (globalVars != null) { // TODO: DELETE THIS PART
-                for (Variable globalVar : globalVars) {
-                    if (name.equals(globalVar)) {
-                        return false;
-                    }
-                }
-            }
             return true;
         }
         return false;
@@ -116,10 +114,20 @@ public class VariableFactory {
         Pattern intPattern = Pattern.compile(INT_PATTERN);
         Pattern strPattern = Pattern.compile(STR_PATTERN);
         Pattern charPattern = Pattern.compile(CHAR_PATTERN);
+        Pattern assignToNewValPattern = Pattern.compile(NEW_VAL_PATTERN);
+        if(!assignToNewValPattern.matcher(value).matches()){ // assignment to existing variable
+            if(variables.containsKey(value)){
+                return variables.get(value).varType.equals(type);
+            }
+            Variable var = block.searchForVar(value);
+            if(var!=null){
+                return var.varType.equals(type);
+            }
+        }
 
         switch (type){
             case("boolean"):
-                return (value.equals("true") || value.equals("false")); //TODO: OR INT
+                return (value.equals("true") || value.equals("false"));
             case("int"):
                 return (intPattern.matcher(value).matches());
             case("double"):
@@ -130,8 +138,21 @@ public class VariableFactory {
             case("String"):
                 return (strPattern.matcher(value).matches());
             default:
-                throw new sJavaException("Unknown type");
+                throw new sJavaException("non existing type");
         }
+
+    }
+
+    private boolean checkAssignmentToExistingVar(String name) throws sJavaException {
+        Variable var = block.searchForVar(name);
+        if (var == null) {
+            throw new sJavaException("assignment to non existing variable");
+        } else {
+            if (!var.assigned) {
+                throw new sJavaException("assignment to unassigned variable");
+            }
+        }
+        return true;
     }
 
 }

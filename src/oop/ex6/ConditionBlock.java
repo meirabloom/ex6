@@ -37,5 +37,5 @@ public class ConditionBlock extends Block {
 
     }
 
-    public boolean verifyCondition
+    public boolean verifyCondition(){return true;}
 }

@@ -39,10 +39,28 @@ public abstract class Block {
     public Block(Block parent, LinkedList<String> lines, LinkedList<String> localVariable) throws sJavaException{
         this.parent = parent;
         this.lines = lines;
-        VariableFactory factory = new VariableFactory(localVariable, globalVariables);
+        VariableFactory factory = new VariableFactory(localVariable, this);
         this. localVariables = factory.getVariables();
         this.methods = methods;
 
+    }
+
+    /**
+     * searchs for given param
+     * @param varName - variable name
+     * @param paramType -
+     * @param block
+     * @return variable
+     */
+    Variable searchForVar(String varName){
+        Variable searchVar = null;
+        Block curBlock = this;
+        while(curBlock.parent!=null){
+            if(curBlock.localVariables.containsKey(varName)){
+                searchVar = curBlock.localVariables.get(varName);
+            }
+        }
+        return searchVar;
     }
 
     public abstract String getName();

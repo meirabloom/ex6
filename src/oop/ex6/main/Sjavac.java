@@ -25,12 +25,10 @@ public class Sjavac {
             LinkedList<String> allLines = firstParser.getLines();
             GlobalBlock global = new GlobalBlock(allLines);
 
+
             System.out.println(LEGAL_CODE);
         }
-        catch (sJavaException s){
-            System.out.println(ILLEGAL_CODE);
-
-        } catch (IOException e) {
+       catch (IOException e) {
             System.out.println(IO_ERRORS);
             System.err.println(BAD_FILE_ERROR_MSG);
         }

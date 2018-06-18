@@ -32,10 +32,13 @@ public class BlockParser {
     private static final String VARIABLE_INIT_LINE = "varInit";
     private static final String METHOD_INIT_LINE = "methodInit";
     private static final String IF_WHILE_BLOCK_LINE = "ifWhileBlock";
+    private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
+    private static final String ASSIGNMENT = "=";
+    private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
 
     // Regexs
     static final String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*{";
-    static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
+  //  static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     static final String VARIABLE_DECLERATION = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
     static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;";
     static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
@@ -168,4 +171,6 @@ public class BlockParser {
         }
         return params;
     }
+
+
 }
