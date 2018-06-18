@@ -21,7 +21,12 @@ public class Sjavac {
             File file = new File(args[0]);
             BufferedReader br = new BufferedReader(new FileReader(file));
             InitialParser firstParser = new InitialParser(file); //TODO where should we close bufferedreader?
+
+
             System.out.println(LEGAL_CODE);
+        }
+        catch (sJavaException s){
+            System.out.println(ILLEGAL_CODE);
         }
         //TODO add the rest of the options
         catch (FileNotFoundException e) {
