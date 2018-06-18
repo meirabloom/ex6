@@ -104,10 +104,19 @@ public class VariableFactory {
      * @param
      * @return
      */
-    private boolean checkName(String name) {
+    private boolean checkName(String name) throws sJavaException {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
         if (namePattern.matcher(name).matches() && !name.equals("_") && !variables.containsKey(name)) {
-            if()
+            String[] arr = block.getParamNames();
+            boolean exists = false;
+            for(String param: arr) {
+                if (param.equals(name)) {
+                    exists = true;
+                }
+                if (exists) {
+                    throw new sJavaException("Variable has same name as method param");
+                }
+            }
             return true;
         }
         return false;

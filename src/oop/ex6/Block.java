@@ -65,6 +65,9 @@ public abstract class Block {
 
     public abstract String getName();
 
+    public String[] getParamNames(){return null;};
+
+
 
 
 

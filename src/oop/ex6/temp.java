@@ -15,11 +15,24 @@ public class temp {
             s.add("int k = 8;");
             s.add("double r = 8.9086;");
             s.add("double b = r;");
+
+            LinkedList<String> m = new LinkedList<String>();
+            m.add("void bla(int a){");
+            m.add("int k = 8;");
+            m.add("double a = 8.9086;");
+            m.add("double b = r;");
+
+            LinkedList<String> my = new LinkedList<String>();
+            my.add("int k = 8;");
+            my.add("double a = 8.9086;");
+            my.add("double b = r;");
             GlobalBlock gb = new GlobalBlock(s);
+
+            MethodBlock mb = new MethodBlock(gb,m,my);
 
            // String s = "(void)\\s+([a-zA-z]\\w*)\\s*+\\((.*)\\)\\s*{";
 
-            VariableFactory vf = new VariableFactory(s, gb);
+            VariableFactory vf = new VariableFactory(s, mb);
             HashMap<String, Variable> t = vf.getVariables();
             System.out.println(t.toString());
 

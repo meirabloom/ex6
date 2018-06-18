@@ -74,7 +74,8 @@ public class MethodBlock extends Block{
 
     public String[] getParamTypes(){ return paramTypes;}
 
-    public String[] getParamNames(){ return paramNames;}
+    @Override
+    public String[] getParamNames(){return paramNames;}
 
     public String getMethodName(){return methodName;}
 

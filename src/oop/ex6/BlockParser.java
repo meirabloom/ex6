@@ -149,7 +149,7 @@ public class BlockParser {
         if(!methods.containsKey(name)){ throw new sJavaException("call to un-initialized method");}
         MethodBlock curMethod = methods.get(name);
         LinkedList<String> allParams = parseMethodCallParams(params); // will return a list of all parameters
-        if(!curMethod.validCallParams(allParams)){ throw new sJavaException("invalid method params");}
+        //if(!curMethod.validCallParams(allParams)){ throw new sJavaException("invalid method params");}
 
     }
 
@@ -171,6 +171,7 @@ public class BlockParser {
         }
         return params;
     }
+
 
 
 }
