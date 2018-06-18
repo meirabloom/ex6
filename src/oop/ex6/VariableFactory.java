@@ -29,7 +29,7 @@ public class VariableFactory {
     HashMap<String, Variable> variables;
     LinkedList<Variable> globalVars; //??
     Matcher m;
-    VariableFactory (String[] strVars, LinkedList<Variable> globalVars){
+    VariableFactory (String[] strVars, LinkedList<Variable> globalVars){ //Also receive
         this.strVars = strVars;
         this.globalVars = globalVars;
         this.variables = new HashMap<String,Variable>();
@@ -56,6 +56,10 @@ public class VariableFactory {
                         throw new sJavaException("illegal name");
                     }
                     if (newMatcher.matches()) { // oneVar is assigned
+                        String value = newMatcher.group(VALUE_PLACE);
+                        if(!value.contains("\"")){ // assignment to existing object
+                            // value = getVar(value).getValue()
+                        }
                         if (!checkValue(type, newMatcher.group(VALUE_PLACE).trim())) {
                             throw new sJavaException("incompatible value");
                         }
@@ -66,7 +70,7 @@ public class VariableFactory {
                         if (isFinal) {
                             throw new sJavaException("Uninitialized final val");
                         }
-                        Variable newVar = new Variable(type, name, UNASSIGNED, isFinal(var), null);
+                        Variable newVar = new Variable(type, name, UNASSIGNED, isFinal, null);
                         variables.put(name, newVar);
                     }
                 }

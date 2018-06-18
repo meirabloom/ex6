@@ -21,6 +21,12 @@ public class BlockParser {
     static final String ASSIGNMENT = "=";
     static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
 
+    // Regexs
+    static final String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*{";
+    static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
+    static final String VARIABLE_DECLERATION = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
+    static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;";
+
 
     private String[] parseMethodParams(String parameterLine) throws sJavaException {
         String[] paramArray = parameterLine.split(",");
@@ -41,7 +47,6 @@ public class BlockParser {
      */
     public Block createBlock(String type, String line, LinkedList blockLines , Block parentBlock)
             throws sJavaException { //TODO
-        // exceptions
         switch (type){
             case METHOD:
                 String[] params = parseMethodParams(line);
@@ -57,4 +62,6 @@ public class BlockParser {
                 return null;
         }
     }
+
+
 }

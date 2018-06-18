@@ -1,9 +1,11 @@
 package oop.ex6.main;
 
+import oop.ex6.GlobalBlock;
 import oop.ex6.InitialParser;
 import oop.ex6.sJavaException;
 
 import java.io.*;
+import java.util.LinkedList;
 
 /**
  * the main class that runs the verifier
@@ -17,19 +19,22 @@ public class Sjavac {
     private static final String BAD_FILE_ERROR_MSG = "File not found";
 
     public static void main(String[] args){
+        if(args.length!=1){
+            System.out.println(IO_ERRORS);
+            System.err.println(BAD_FILE_ERROR_MSG);
+        }
         try {
             File file = new File(args[0]);
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            InitialParser firstParser = new InitialParser(file); //TODO where should we close bufferedreader?
-
+            InitialParser firstParser = new InitialParser(file);
+            LinkedList<String> allLines = firstParser.getLines();
+            GlobalBlock global = new GlobalBlock(allLines);
 
             System.out.println(LEGAL_CODE);
         }
         catch (sJavaException s){
             System.out.println(ILLEGAL_CODE);
-        }
-        //TODO add the rest of the options
-        catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
             System.out.println(IO_ERRORS);
             System.err.println(BAD_FILE_ERROR_MSG);
         }
