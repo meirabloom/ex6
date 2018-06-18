@@ -14,6 +14,7 @@ public class MethodBlock extends Block{
     private static final String MISSING_BRACKET = "Missing }";
     private static final String RETURN_SIGNATURE = "return;";
     private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
+    private static String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*{";
 
     private String[] paramTypes;
     private String methodName;
@@ -40,7 +41,16 @@ public class MethodBlock extends Block{
      * Sets method na
      * @return an array of the methods parameters
      */
-    private void extractMethodComponents() { // TODO: name, type array, check params
+    private void extractMethodComponents() { // TODO: name, type array, check param
+        Pattern p = Pattern.compile(METHOD_SIGNATURE);
+        Matcher m = p.matcher(lines.getFirst());
+        if(m.matches()) {
+            String name = m.group(2);
+        }
+
+
+
+
 
 //        String[] paramArray = lines.getFirst().split(",");
 //        for (int i =0; i < paramArray.length; i++) {
