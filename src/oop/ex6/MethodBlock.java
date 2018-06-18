@@ -9,12 +9,13 @@ import java.util.regex.Pattern;
  */
 public class MethodBlock extends Block{
 
-    static final String RETURN_SIGNATURE = "return;";
-    static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
+    //Constants
+    private static final String MISSING_RETURN_EXCEPTION = "missing proper return statement";
+    private static final String MISSING_BRACKET = "Missing }";
+    private static final String RETURN_SIGNATURE = "return;";
+    private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
 
-    //exception message
-    static final String MISSING_RETURN_EXCEPTION = "missing proper return statement";
-    static final String MISSING_BRACKET = "Missing }";
+    String[] paramTypes;
 
     /**
      * constructor
@@ -27,6 +28,8 @@ public class MethodBlock extends Block{
     MethodBlock(Block parent, LinkedList<String> lines,
                 LinkedList<String> methods, LinkedList<String> localVariable) throws sJavaException {
         super(parent, lines, methods, localVariable);
+        checkMethodEnding();
+        extractMethodParams();
     }
 
     @Override
@@ -37,20 +40,21 @@ public class MethodBlock extends Block{
     /**
      * @return an array of the methods parameters
      */
-    private String[] getMethodParams() {
+    private void extractMethodParams() { // TODO: finish this method (does not work atm)
         String[] paramArray = lines.getFirst().split(",");
         for (int i =0; i < paramArray.length; i++) {
             paramArray[i] = paramArray[i].trim();
+            String[] paramElements = paramArray[i].split(" ");
+            paramArray[i] = paramArray[i].trim();
         }
-        return paramArray;
+        paramTypes =  paramArray;
     }
 
     /**
      * checks if the method ends with a return statement and curly brackets
-     * @return true if the method ends properly
      * @throws sJavaException - an exception thrown if the method ends illegally
      */
-    boolean checkMethodEnding() throws sJavaException {
+    private void checkMethodEnding() throws sJavaException {
         Pattern endPattern = Pattern.compile(END_METHOD_SIGNATURE);
         Matcher m = endPattern.matcher(lines.getLast());
         if (!lines.get(lines.size()-1).equals(RETURN_SIGNATURE)){
@@ -59,8 +63,10 @@ public class MethodBlock extends Block{
         if (!m.matches()) {
             throw new sJavaException(MISSING_BRACKET);
         }
-        return true;
     }
+
+    public String[] getParamTypes(){ return paramTypes;}
+
 
 
 

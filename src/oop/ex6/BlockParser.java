@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * iterates over the string lines of code and parses them into block objects according to their type
@@ -17,21 +19,22 @@ public class BlockParser {
     private LinkedList<String> innerBlockLines = new LinkedList<String>();
     private LinkedList<String> variables = new LinkedList<String>();
     private LinkedList<String> methods = new LinkedList<String>();
+    private Matcher m;
 
     private int blockCounter = 0;
-    private Queue<Block> blocksToRead;
+    private Queue<Block> blocksToRead = new LinkedList<Block>();
 
     //constants
-    static final String METHOD_CALL_LINE = "methodCall";
-    static final String VARIABLE_ASSIGNMENT_LINE = "VarAssignment";
-    static final String RETURN_LINE = "return";
-    static final String BLOCK_END_LINE = "}";
-    static final String VARIABLE_INIT_LINE = "varInit";
-    static final String METHOD_INIT_LINE = "methodInit";
-    static final String IF_WHILE_BLOCK_LINE = "ifWhileBlock";
+    private static final String METHOD_CALL_LINE = "methodCall";
+    private static final String VARIABLE_ASSIGNMENT_LINE = "VarAssignment";
+    private static final String RETURN_LINE = "return";
+    private static final String BLOCK_END_LINE = "}";
+    private static final String VARIABLE_INIT_LINE = "varInit";
+    private static final String METHOD_INIT_LINE = "methodInit";
+    private static final String IF_WHILE_BLOCK_LINE = "ifWhileBlock";
 
-    static final String ASSIGNMENT = "=";
-    static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
+    private static final String ASSIGNMENT = "=";
+    private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
 
     // Regexs
     static final String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*{";
@@ -39,17 +42,6 @@ public class BlockParser {
     static final String VARIABLE_DECLERATION = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
     static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;";
 
-
-    private String[] parseMethodParams(String parameterLine) throws sJavaException {
-        String[] paramArray = parameterLine.split(",");
-        for (int i =0; i < paramArray.length; i++) {
-            paramArray[i] = paramArray[i].trim() + ";";
-            if (paramArray[i].contains(ASSIGNMENT)) {
-                throw new sJavaException(METHOD_PARAMETER_EXCEPTION_MSG);
-            }
-        }
-        return paramArray;
-    }
 
     /**
      * Receives a line from a block and acts according to the line type. This Method also adds new nested
@@ -76,7 +68,7 @@ public class BlockParser {
                 }
                 blockCounter++;
                 innerBlockLines.add(line);
-                methods.add(line);
+                methods.add(line); //TODO add another method of methodInit() that will add method NAME to gloabal list and ??
                 break;
 
             case IF_WHILE_BLOCK_LINE:
@@ -89,7 +81,12 @@ public class BlockParser {
 
             case METHOD_CALL_LINE:
                 if(blockCounter==0){
-                    // TODO: CheckMethodCall();
+                    if(block.getName().equals("global")){
+                        // TODO: ?
+
+                    }else {
+                        // TODO: CheckMethodCall();
+                    }
                 }else{
                     innerBlockLines.add(line);
                 }
@@ -121,7 +118,6 @@ public class BlockParser {
                     }
                     innerBlockLines.clear();
                     variables.clear();
-                    methods.clear();
                 }
                 break;
 
@@ -130,7 +126,41 @@ public class BlockParser {
         }
     }
 
+    private void checkMethodCall(String methodCallLine) throws sJavaException {
+        Pattern methodLinePattern = Pattern.compile(METHOD_CALL);
+        m = methodLinePattern.matcher(methodCallLine);
+        String methodName;
+        String params;
+        if(m.matches()){
+            methodName = m.group(1);
+            params = m.group(2);
+        }else{
+            throw new sJavaException("illegal method call");
+        }
+        if(!methods.contains(methodName)){
+            throw new sJavaException("call to undefined method");
+        }
+        String[] allParams = parseMethodParams(params);
 
 
 
+    }
+
+
+    /**
+     * Receive a line representing a method call line parameters and returns a list of parameters.
+     * @param parameterLine - line of prameters
+     * @return paramArray - list of seperated parameters
+     * @throws sJavaException - if the prameters are assigned
+     */
+    private String[] parseMethodParams(String parameterLine) throws sJavaException {
+        String[] paramArray = parameterLine.split(",");
+        for (int i =0; i < paramArray.length; i++) {
+            paramArray[i] = paramArray[i].trim() + ";";
+            if (paramArray[i].contains(ASSIGNMENT)) {
+                throw new sJavaException(METHOD_PARAMETER_EXCEPTION_MSG);
+            }
+        }
+        return paramArray;
+    }
 }

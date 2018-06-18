@@ -32,4 +32,5 @@ public class Variable {
     public void setGlobal(){
         isGlobal = true;
     }
-}
+
+    }
