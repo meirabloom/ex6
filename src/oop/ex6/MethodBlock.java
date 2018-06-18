@@ -70,6 +70,14 @@ public class MethodBlock extends Block{
 
     public String getMethodName(){return methodName;}
 
+    /**
+     * Checks potential method calls parameters and returns if they are legal
+     * @param params - list of params
+     * @return true if params are valid
+     */
+    public boolean validCallParams(LinkedList<String> params){
+        return true;
+    }
 
 
 

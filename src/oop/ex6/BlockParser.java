@@ -18,7 +18,7 @@ public class BlockParser {
 
     private LinkedList<String> innerBlockLines = new LinkedList<String>();
     private LinkedList<String> variables = new LinkedList<String>();
-    private LinkedList<MethodBlock> methods = new LinkedList<MethodBlock>();
+    private HashMap<String, MethodBlock> methods = new  HashMap<String, MethodBlock>();
     private Matcher m;
 
     private int blockCounter = 0;
@@ -41,6 +41,7 @@ public class BlockParser {
     static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     static final String VARIABLE_DECLERATION = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
     static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;";
+
 
 
     /**
@@ -83,8 +84,7 @@ public class BlockParser {
                     throw new sJavaException("Method call in global scope");
                 }
                 if(blockCounter==0){
-                    // TODO checkMethodCall();
-
+                    checkMethodCall(line);
                 }else{
                     innerBlockLines.add(line);
                 }
@@ -110,9 +110,11 @@ public class BlockParser {
                     if(block.getName().equals("global")) {
                         //global scope only has nested method blocks, no if\while blocks
                         MethodBlock newMethod = new MethodBlock(block, innerBlockLines, variables);
-
+                        if(methods.containsKey(newMethod.getMethodName())){
+                            throw new sJavaException("method overloading");
+                        }
                         blocksToRead.add(newMethod);
-                        methods.add(newMethod);
+                        methods.put(newMethod.getMethodName(),newMethod);
                     } else {
                         blocksToRead.add(new ConditionBlock(block, innerBlockLines, variables));
                     }
@@ -126,47 +128,46 @@ public class BlockParser {
         }
     }
 
+
+    /**
+     * Checks if method call is ok: checks if the structure of the call follows expected structure, checks
+     * that the cal is to an existing method, and checks the parameters are legal.
+     * @param methodCallLine - method call line
+     * @throws sJavaException - if there s an illegal method call, a call to un-initialized method or
+     * invalid method params.
+     */
     private void checkMethodCall(String methodCallLine) throws sJavaException {
         Pattern methodLinePattern = Pattern.compile(METHOD_CALL);
         m = methodLinePattern.matcher(methodCallLine);
-        String methodName;
+        String name;
         String params;
         if(m.matches()){
-            methodName = m.group(1);
+            name = m.group(1);
             params = m.group(2);
-        }else{
-            throw new sJavaException("illegal method call");
-        }
-        for(MethodBlock method: methods){
-            if(methods.contains(methodName)){
-                throw new sJavaException("call to undefined method");
-            }
-        }
-
-        String[] allParams = parseMethodCallParams(params); // will return a list of all parameters
-        for(int i=0; i<allParams.length; i++){
-            // checkParam( ,  : will check if it is initialized and if it is the right type
-        }
-
-
+        }else{ throw new sJavaException("illegal method call"); }
+        if(!methods.containsKey(name)){ throw new sJavaException("call to un-initialized method");}
+        MethodBlock curMethod = methods.get(name);
+        LinkedList<String> allParams = parseMethodCallParams(params); // will return a list of all parameters
+        if(!curMethod.validCallParams(allParams)){ throw new sJavaException("invalid method params");}
 
     }
 
 
     /**
-     * Receive a line representing a method call line parameters and returns a list of parameters.
+     * Receive a line representing a method call line parameters and returns a linked list of parameters.
      * @param parameterLine - line of prameters
      * @return paramArray - list of seperated parameters
      * @throws sJavaException - if the prameters are assigned
      */
-    private String[] parseMethodCallParams(String parameterLine) throws sJavaException {
-        String[] paramArray = parameterLine.split(",");
-        for (int i =0; i < paramArray.length; i++) {
-            paramArray[i] = paramArray[i].trim() + ";";
-            if (paramArray[i].contains(ASSIGNMENT)) {
+    private LinkedList<String>  parseMethodCallParams(String parameterLine) throws sJavaException {
+        LinkedList<String> params = new LinkedList<String>();
+        String[]  paramArray = parameterLine.split(",");
+        for (String singleParam : paramArray) {
+            if (singleParam.contains(ASSIGNMENT)) {
                 throw new sJavaException(METHOD_PARAMETER_EXCEPTION_MSG);
             }
+            params.add(singleParam.trim());
         }
-        return paramArray;
+        return params;
     }
 }
