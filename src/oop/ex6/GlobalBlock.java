@@ -20,4 +20,10 @@ public class GlobalBlock extends Block {
     public void setVariables() throws sJavaException {
 
     }
+
+    @Override
+    public String getName() {
+        return "global";
+    }
+
 }

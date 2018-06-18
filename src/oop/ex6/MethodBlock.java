@@ -20,14 +20,18 @@ public class MethodBlock extends Block{
      * constructor
      * @param parent - the global block in which the method is nested
      * @param lines
-     * @param globalVariables
      * @param methods
      * @param localVariable
      * @throws sJavaException
      */
-    MethodBlock(Block parent, LinkedList<String> lines, LinkedList<Variable> globalVariables,
-                LinkedList<Block> methods, LinkedList<String> localVariable) throws sJavaException {
-        super(parent, lines, globalVariables, methods, localVariable);
+    MethodBlock(Block parent, LinkedList<String> lines,
+                LinkedList<String> methods, LinkedList<String> localVariable) throws sJavaException {
+        super(parent, lines, methods, localVariable);
+    }
+
+    @Override
+    public String getName() {
+        return "method";
     }
 
     /**
