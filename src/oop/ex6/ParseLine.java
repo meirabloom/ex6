@@ -2,6 +2,9 @@ package oop.ex6;
 
 import java.util.LinkedList;
 
+/**
+ *
+ */
 public class ParseLine {
 
     String line;
