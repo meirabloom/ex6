@@ -25,33 +25,6 @@ public class MethodParser {
 
     }
 
-    /**
-     *
-     * @param parameterLine
-     * @return
-     * @throws sJavaException
-     */
-    private LinkedList<String> parseParameters(String parameterLine) throws sJavaException {
-        LinkedList<String> params = new LinkedList<String>();
-        String[]  paramArray = parameterLine.split(",");
-        for (String singleParam : paramArray) {
-            if (singleParam.contains(ASSIGNMENT)) {
-                throw new sJavaException(METHOD_PARAMETER_EXCEPTION_MSG);
-            }
-            params.add(singleParam.trim());
-        }
-        return params;
-    }
-
-
-
-    private void validateCallParams(LinkedList<String> params){
-        for(String singleParam: params){ //check all params are initialized
-
-        }
-
-    }
-
 
     /**
      * Checks if method call is ok: checks if the structure of the call follows expected structure, checks
@@ -72,9 +45,56 @@ public class MethodParser {
         if(!methods.containsKey(name)){ throw new sJavaException("call to un-initialized method");}
         MethodBlock curMethod = methods.get(name);
         LinkedList<String> allParams = parseParameters(params);
-        //if(!curMethod.validCallParams(allParams)){ throw new sJavaException("invalid method params");}
-
-        //ValidateCallParams()
+        if(allParams.size()!= curMethod.getParamTypes().length){
+            throw new sJavaException("wrong num of params");
+        }
+        validateCallParams(allParams, curMethod);
     }
+
+    /**
+     *
+     * @param parameterLine
+     * @return
+     * @throws sJavaException
+     */
+    private LinkedList<String> parseParameters(String parameterLine) throws sJavaException {
+        LinkedList<String> params = new LinkedList<String>();
+        String[]  paramArray = parameterLine.split(",");
+        for (String singleParam : paramArray) {
+            if (singleParam.contains(ASSIGNMENT)) {
+                throw new sJavaException(METHOD_PARAMETER_EXCEPTION_MSG);
+            }
+            params.add(singleParam.trim());
+        }
+        return params;
+    }
+
+
+    /**
+     * validates the parameters of the mathod call are legal: that they are all initialized veriables in the
+     * correct scope, that their type match the methods parameter types.
+     * @param params - parameters to check
+     * @param method -
+     * @throws sJavaException
+     */
+    private void validateCallParams(LinkedList<String> params, MethodBlock method) throws sJavaException {
+        String[] types = method.getParamTypes();
+        for(int i=0; i< params.size(); i++){
+            Variable curVar = block.searchForVar(params.get(i));
+            if(curVar==null){
+                throw new sJavaException("param not found");
+            }else{
+                if(!curVar.assigned){
+                    throw new sJavaException("param not assigned");
+                }
+                if (!curVar.varType.equals(types[i])){
+                    throw new sJavaException("wrong param type");
+                }
+            }
+        }
+    }
+
+
+
 
 }

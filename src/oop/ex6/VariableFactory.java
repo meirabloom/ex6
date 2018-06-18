@@ -43,6 +43,11 @@ public class VariableFactory {
     }
 
 
+    /**
+     *
+     * @return
+     * @throws sJavaException
+     */
     public HashMap<String, Variable> getVariables() throws sJavaException {
         for (String var : strVars) {
             Pattern general = Pattern.compile(LEGAL_PATTERN);
@@ -86,6 +91,11 @@ public class VariableFactory {
         return variables;
     }
 
+    /**
+     *
+     * @param var
+     * @return
+     */
     private boolean isFinal(String var){ return var.startsWith("final "); }
 
 
@@ -97,6 +107,7 @@ public class VariableFactory {
     private boolean checkName(String name) {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
         if (namePattern.matcher(name).matches() && !name.equals("_") && !variables.containsKey(name)) {
+            if()
             return true;
         }
         return false;
@@ -115,17 +126,18 @@ public class VariableFactory {
         Pattern strPattern = Pattern.compile(STR_PATTERN);
         Pattern charPattern = Pattern.compile(CHAR_PATTERN);
         Pattern assignToNewValPattern = Pattern.compile(NEW_VAL_PATTERN);
+
         if(!assignToNewValPattern.matcher(value).matches()){ // assignment to existing variable
-            if(variables.containsKey(value)){
+            if(variables.containsKey(value)){ // assignment to variable in the same scope
                 return variables.get(value).varType.equals(type);
             }
             Variable var = block.searchForVar(value);
-            if(var!=null){
+            if(var!=null){ // assignment to variable from outer scope
                 return var.varType.equals(type);
             }
         }
 
-        switch (type){
+        switch (type){ // new value
             case("boolean"):
                 return (value.equals("true") || value.equals("false"));
             case("int"):
@@ -140,19 +152,8 @@ public class VariableFactory {
             default:
                 throw new sJavaException("non existing type");
         }
-
     }
 
-    private boolean checkAssignmentToExistingVar(String name) throws sJavaException {
-        Variable var = block.searchForVar(name);
-        if (var == null) {
-            throw new sJavaException("assignment to non existing variable");
-        } else {
-            if (!var.assigned) {
-                throw new sJavaException("assignment to unassigned variable");
-            }
-        }
-        return true;
-    }
+
 
 }

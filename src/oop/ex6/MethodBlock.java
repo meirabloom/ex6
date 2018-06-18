@@ -17,6 +17,7 @@ public class MethodBlock extends Block{
     private static String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*{";
 
     private String[] paramTypes;
+    private String[] paramNames;
     private String methodName;
 
     /**
@@ -73,16 +74,11 @@ public class MethodBlock extends Block{
 
     public String[] getParamTypes(){ return paramTypes;}
 
+    public String[] getParamNames(){ return paramNames;}
+
     public String getMethodName(){return methodName;}
 
-    /**
-     * Checks potential method calls parameters and returns if they are legal
-     * @param params - list of params
-     * @return true if params are valid
-     */
-    public boolean validCallParams(LinkedList<String> params){
-        return true;
-    }
+
 
 
 
