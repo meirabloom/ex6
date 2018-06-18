@@ -10,14 +10,17 @@ public class ConditionBlock extends Block {
     private static final String INT = "int";
     private static final String BOOLEAN = "boolean";
     private static final String DOUBLE = "double";
-
+    private static final String TRUE = "true";
+    private static final String FALSE = "false";
     //regex
-    static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
-    static final String AND_OR = "(&&)|(\\|\\|)";
+    private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
+    private static final String AND_OR = "(&&)|(\\|\\|)";
+    private static final String REQUIRED_CONDITION = "\\s*(true|false)|(\\d+\\.?\\d*)|([^\\d\\s]\\S*)";
+    private static final String SPECIFIC_CONDITION = "-?\\d+(\\.\\d+)?";
 
     ConditionBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable)
             throws sJavaException {
-        super(parent, lines,localVariable);
+        super(parent, lines, localVariable);
     }
 
     @Override
@@ -27,15 +30,29 @@ public class ConditionBlock extends Block {
 
     //TODO get the condition, check if its valid- if it says true/ false/ a number/ an existing variable
 
-    private void extractCondition(){
-        Pattern p = Pattern.compile(CONDITION_SIGNATURE);
-        Matcher m = p.matcher(lines.getFirst());
-        if(m.matches()) {
-            String condition = m.group(2);
-            String[] multipleConditions = condition.trim().split(AND_OR);
-        }
+    private void verifyCondition() throws sJavaException {
+        String[] multipleConditions;
+        String conditionLine;
+        String conditionSignature = lines.getFirst();
+        conditionLine = conditionSignature.substring((conditionSignature.indexOf("(") + 1),
+                conditionSignature.indexOf(")"));
+        multipleConditions = conditionLine.trim().split(AND_OR);
+        Pattern p = Pattern.compile(REQUIRED_CONDITION);
+        for (String condition : multipleConditions) {
+            Matcher m = p.matcher(condition);
+            if(!m.matches()) {
+                throw new sJavaException("Illegal condition");
+            }
+            condition = condition.trim();
+            p = Pattern.compile(SPECIFIC_CONDITION);
+            m = p.matcher(condition);
+            if (!condition.equals(TRUE) && !condition.equals(FALSE) && !m.matches()) {
+
+
+            }
+        } //TODO -- what if the condition was empty?
+
 
     }
 
-    public boolean verifyCondition(){return true;}
 }
