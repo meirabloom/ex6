@@ -19,10 +19,6 @@ public class Sjavac {
     private static final String BAD_FILE_ERROR_MSG = "File not found";
 
     public static void main(String[] args){
-        if(args.length!=1){
-            System.out.println(IO_ERRORS);
-            System.err.println(BAD_FILE_ERROR_MSG);
-        }
         try {
             File file = new File(args[0]);
             InitialParser firstParser = new InitialParser(file);
