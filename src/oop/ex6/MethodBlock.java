@@ -47,11 +47,6 @@ public class MethodBlock extends Block{
         if(m.matches()) {
             String name = m.group(2);
         }
-
-
-
-
-
 //        String[] paramArray = lines.getFirst().split(",");
 //        for (int i =0; i < paramArray.length; i++) {
 //            paramArray[i] = paramArray[i].trim();
