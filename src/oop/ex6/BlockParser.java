@@ -9,7 +9,7 @@ import java.util.LinkedList;
 /**
  * iterates over the string lines of code and parses them into block objects according to their type
  */
-public class BlockFactory {
+public class BlockParser {
 
     /** the array containing the blocks */
     ArrayList<Block> blockList = new ArrayList<>();
@@ -18,7 +18,6 @@ public class BlockFactory {
     static final String METHOD = "method";
     static final String WHILE = "while";
     static final String IF = "if";
-    static final String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*+\\((.)\\)\\s{";
     static final String ASSIGNMENT = "=";
     static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
 

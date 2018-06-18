@@ -30,7 +30,6 @@ public class MethodBlock extends Block{
         super(parent, lines, globalVariables, methods, localVariable);
     }
 
-
     /**
      * @return an array of the methods parameters
      */
@@ -41,6 +40,7 @@ public class MethodBlock extends Block{
         }
         return paramArray;
     }
+
     /**
      * checks if the method ends with a return statement and curly brackets
      * @return true if the method ends properly
