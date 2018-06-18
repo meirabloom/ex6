@@ -21,7 +21,7 @@ public class MethodParser {
        this.block = block;
     }
 
-    public void checkMethod(){ //
+    public void checkMethod(){ //TODO
 
     }
 
@@ -54,7 +54,7 @@ public class MethodParser {
     /**
      *
      * @param parameterLine
-     * @return
+     * @return - the method parameters
      * @throws sJavaException
      */
     private LinkedList<String> parseParameters(String parameterLine) throws sJavaException {

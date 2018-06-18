@@ -28,9 +28,7 @@ public class ConditionBlock extends Block {
         return "condition";
     }
 
-    //TODO get the condition, check if its valid- if it says true/ false/ a number/ an existing variable
-
-    private void verifyCondition() throws sJavaException {
+    private boolean verifyCondition() throws sJavaException {
         String[] multipleConditions;
         String conditionLine;
         String conditionSignature = lines.getFirst();
@@ -40,19 +38,30 @@ public class ConditionBlock extends Block {
         Pattern p = Pattern.compile(REQUIRED_CONDITION);
         for (String condition : multipleConditions) {
             Matcher m = p.matcher(condition);
+
             if(!m.matches()) {
                 throw new sJavaException("Illegal condition");
             }
             condition = condition.trim();
             p = Pattern.compile(SPECIFIC_CONDITION);
             m = p.matcher(condition);
+
             if (!condition.equals(TRUE) && !condition.equals(FALSE) && !m.matches()) {
 
+                Variable variable = searchForVar(condition);
 
+                if(variable != null && variable.assigned) {
+                    String varType = variable.varType;
+                    if (!varType.equals(INT) && !varType.equals(DOUBLE) && !varType.equals(BOOLEAN)) {
+                        throw new sJavaException("illegal condition variable assignment");
+                    }
+                }
+                else {
+                    throw new sJavaException("condition variable not assigned");
+                }
             }
         } //TODO -- what if the condition was empty?
-
-
+        return true;
     }
 
 
