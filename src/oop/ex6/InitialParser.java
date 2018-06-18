@@ -28,7 +28,6 @@ public class InitialParser {
     }
 
     /**
-     *
      * @param file - the file to parse
      * @throws IOException - if the file is not readable
      */
