@@ -32,16 +32,19 @@ public class BlockParser {
     private static final String VARIABLE_INIT_LINE = "varInit";
     private static final String METHOD_INIT_LINE = "methodInit";
     private static final String IF_WHILE_BLOCK_LINE = "ifWhileBlock";
+
     private static final String ASSIGNMENT = "=";
     private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
 
     // Regexs
-    private static final String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*{";
+    private static final String METHOD_INIT = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{";
     private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
-    private static final String VARIABLE_DECLERATION = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
+    private static final String VARIABLE_INIT = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
     private static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;";
     private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
-    private static final String RETURN
+    private static final String RETURN = "\\s*return;\\s*";
+    private static final String BLOCK_END = "\\s*}\\s*";
+
 
 
     /**
@@ -153,8 +156,31 @@ public class BlockParser {
      * @param line - the code line to check
      * @return - the name of the type of line
      */
-    private String parseLine(String line) {
-        Pattern varInitPattern =
+    private String parseLine(String line) throws sJavaException {
+        if(Pattern.compile(VARIABLE_INIT).matcher(line).matches()){
+            return VARIABLE_INIT_LINE;
+        }
+        if(Pattern.compile(METHOD_INIT).matcher(line).matches()){
+            return METHOD_INIT_LINE;
+        }
+        if(Pattern.compile(VARIABLE_ASSIGNMENT).matcher(line).matches()){
+            return VARIABLE_ASSIGNMENT_LINE;
+        }
+        if(Pattern.compile(METHOD_CALL).matcher(line).matches()){
+            return METHOD_CALL;
+        }
+        if(Pattern.compile(RETURN).matcher(line).matches()){
+            return RETURN_LINE;
+        }
+        if(Pattern.compile(CONDITION_SIGNATURE ).matcher(line).matches()){
+            return IF_WHILE_BLOCK_LINE;
+        }
+        if(Pattern.compile(BLOCK_END).matcher(line).matches()){
+            return BLOCK_END_LINE;
+        }
+        else{
+            throw new sJavaException("illegal line");
+        }
 
     }
 

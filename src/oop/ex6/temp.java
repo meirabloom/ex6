@@ -29,6 +29,7 @@ public class temp {
             GlobalBlock gb = new GlobalBlock(s);
 
             ConditionBlock cb = new ConditionBlock(gb,s,my);
+            cb.getName();
             MethodBlock mb = new MethodBlock(gb,m,my);
 
            // String s = "(void)\\s+([a-zA-z]\\w*)\\s*+\\((.*)\\)\\s*{";

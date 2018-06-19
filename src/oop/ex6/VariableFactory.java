@@ -139,7 +139,7 @@ public class VariableFactory {
             }
             Variable var = block.searchForVar(value);
             if(var!=null){ // assignment to variable from outer scope
-                return var.checkAssignment(type,block);
+                return var.checkAssignment(type);
             }
         }
 
