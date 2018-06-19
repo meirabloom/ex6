@@ -19,6 +19,7 @@ public class BlockParser {
     private int blockCounter = 0;
     private Queue<Block> blocksToRead = new LinkedList<Block>();
 
+
     //constants
     private static final String METHOD_CALL_LINE = "methodCall";
     private static final String VARIABLE_ASSIGNMENT_LINE = "VarAssignment";
@@ -49,13 +50,15 @@ public class BlockParser {
      * @throws sJavaException
      */
     public void readBlock(LinkedList<String> lines, Block block) throws sJavaException {
+
         for (String line: lines) {
             String type = parseLine(line);
             readLine(type, line, block);
         }
-        for (Block newBlock : blocksToRead) {
+        for (Block newBlock : blocksToRead) { //TODO the prob is that the methods get here
+            // with line as an empty array, we need to figure out why
             blocksToRead.remove();
-            readBlock(innerBlockLines, newBlock);
+            readBlock(newBlock.lines, newBlock);
         }
     }
 
@@ -87,8 +90,10 @@ public class BlockParser {
                 break;
 
             case IF_WHILE_BLOCK_LINE:
-                if(block.parent.getName().equals("global")){
-                    throw new sJavaException("If or While block not in method");
+                if(blockCounter==0) {
+                    if (block.getName().equals("global")) {
+                        throw new sJavaException("If or While block not in method");
+                    }
                 }
                 blockCounter++;
                 innerBlockLines.add(line);
