@@ -60,7 +60,7 @@ public class BlockParser {
             blocksToRead.remove();
             readBlock(newBlock.lines, newBlock);
         }
-    }
+     }
 
     /**
      * Receives a line from a block and acts according to the line type. This Method also adds new nested
