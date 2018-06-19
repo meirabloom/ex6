@@ -12,16 +12,25 @@ public class MethodParser {
     private Matcher m;
 
 
+    private static final String MISSING_RETURN_EXCEPTION = "missing proper return statement";
+    private static final String MISSING_BRACKET = "Missing }";
+    private static final String RETURN_SIGNATURE = "return;";
     private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     private static final String ASSIGNMENT = "=";
     private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
+    private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
+
 
     MethodParser(LinkedList<String> methodLines, Block block){
        this.methodLines = methodLines;
        this.block = block;
     }
 
-    public void checkMethod(){ //TODO
+    public void checkMethod() throws sJavaException {
+        checkMethodEnding(methodLines.getLast(),methodLines.get(methodLines.size()-1));
+        String callLine = methodLines.getFirst();
+        String paramLine = callLine.substring(callLine.indexOf("(")+1,callLine.indexOf(")"));
+
 
     }
 
@@ -53,7 +62,7 @@ public class MethodParser {
 
     /**
      *
-     * @param parameterLine
+     * @param parameterLine - line of params
      * @return - the method parameters
      * @throws sJavaException
      */
@@ -91,6 +100,21 @@ public class MethodParser {
                     throw new sJavaException("wrong param type");
                 }
             }
+        }
+    }
+
+    /**
+     * checks if the method ends with a return statement and curly brackets
+     * @throws sJavaException - an exception thrown if the method ends illegally
+     */
+    private void checkMethodEnding(String returnStatement, String endStatement) throws sJavaException {
+        Pattern endPattern = Pattern.compile(END_METHOD_SIGNATURE);
+        Matcher m = endPattern.matcher(endStatement);
+        if (!returnStatement.equals(RETURN_SIGNATURE)){
+            throw new sJavaException(MISSING_RETURN_EXCEPTION);
+        }
+        if (!m.matches()) {
+            throw new sJavaException(MISSING_BRACKET);
         }
     }
 

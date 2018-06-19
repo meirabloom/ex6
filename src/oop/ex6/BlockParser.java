@@ -87,7 +87,6 @@ public class BlockParser {
                 if(!block.getName().equals("global")){
                     throw new sJavaException("method declared outside main block");
                 }
-
                 blockCounter++;
                 innerBlockLines.add(line);
                 break;
@@ -105,7 +104,7 @@ public class BlockParser {
                     throw new sJavaException("Method call in global scope");
                 }
                 if(blockCounter==0){
-                   // checkMethodCall(line);
+                   checkMethodCall(line, methods);
                 }else{
                     innerBlockLines.add(line);
                 }
@@ -130,14 +129,14 @@ public class BlockParser {
                 if(blockCounter==0){
                     if(block.getName().equals("global")) {
                         //global scope only has nested method blocks, no if\while blocks
-                        MethodBlock newMethod = new MethodBlock(block, innerBlockLines, variables);
+                        MethodBlock newMethod = new MethodBlock(block, innerBlockLines, variables, methods);
                         if(methods.containsKey(newMethod.getMethodName())){
                             throw new sJavaException("method overloading");
                         }
                         blocksToRead.add(newMethod);
                         methods.put(newMethod.getMethodName(),newMethod);
                     } else {
-                        blocksToRead.add(new ConditionBlock(block, innerBlockLines, variables));
+                        blocksToRead.add(new ConditionBlock(block, innerBlockLines, variables, methods));
                     }
                     innerBlockLines.clear();
                     variables.clear();
@@ -202,6 +201,31 @@ public class BlockParser {
         if(var1==null || var2==null){ throw new sJavaException("variables not found");}
         if(!var2.assigned){ throw new sJavaException("Variable not assigned");}
         if(!var2.checkAssignment(var1.varType)){ throw new sJavaException("incompatible types");}
+    }
+
+    /**
+     * Checks if method call is ok: checks if the structure of the call follows expected structure, checks
+     * that the cal is to an existing method, and checks the parameters are legal.
+     * @param methodCallLine - method call line
+     * @throws sJavaException - if there s an illegal method call, a call to un-initialized method or
+     * invalid method params.
+     */
+    public void checkMethodCall(String methodCallLine, HashMap<String, MethodBlock> methods) throws sJavaException {
+        Pattern methodLinePattern = Pattern.compile(METHOD_CALL);
+        m = methodLinePattern.matcher(methodCallLine);
+        String name;
+        String params;
+        if(m.matches()){
+            name = m.group(1);
+            params = m.group(2);
+        }else{ throw new sJavaException("illegal method call"); }
+        if(!methods.containsKey(name)){ throw new sJavaException("call to un-initialized method");}
+        MethodBlock curMethod = methods.get(name);
+        curMethod.checkParams(params);
+//        LinkedList<String> allParams = parseParameters(params);
+//        if(allParams.size()!= curMethod.getParamTypes().length){
+//            throw new sJavaException("wrong num of params");
+//        }
     }
 
 }

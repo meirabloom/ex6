@@ -1,5 +1,6 @@
 package oop.ex6;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,9 +19,9 @@ public class ConditionBlock extends Block {
     private static final String REQUIRED_CONDITION = "\\s*(true|false)|(\\d+\\.?\\d*)|([^\\d\\s]\\S*)";
     private static final String SPECIFIC_CONDITION = "-?\\d+(\\.\\d+)?";
 
-    ConditionBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable)
-            throws sJavaException {
-        super(parent, lines, localVariable);
+    ConditionBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable,
+                   HashMap<String,MethodBlock> methods) throws sJavaException {
+        super(parent, lines, localVariable, methods);
         verifyCondition();
     }
 

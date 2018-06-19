@@ -1,5 +1,6 @@
 package oop.ex6;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +20,7 @@ public class MethodBlock extends Block{
     private String[] paramTypes;
     private String[] paramNames;
     private String methodName;
+    private MethodParser methodParser;
 
     /**
      * constructor
@@ -27,11 +29,13 @@ public class MethodBlock extends Block{
      * @param localVariable
      * @throws sJavaException
      */
-    MethodBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable) throws sJavaException {
-        super(parent, lines, localVariable);
-        // Method parser. check method
+    MethodBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable,
+                HashMap<String, MethodBlock> methods) throws sJavaException {
+        super(parent, lines, localVariable, methods);
         checkMethodEnding();
         extractMethodComponents();
+        methodParser = new MethodParser(lines,this);
+        methodParser.checkMethod();
     }
 
     @Override
@@ -71,6 +75,10 @@ public class MethodBlock extends Block{
         if (!m.matches()) {
             throw new sJavaException(MISSING_BRACKET);
         }
+    }
+
+    public void checkParams(String params) throws sJavaException {
+        methodParser.checkMethodCall(params, methods);
     }
 
     public String[] getParamTypes(){ return paramTypes;}
