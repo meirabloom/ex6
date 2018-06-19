@@ -65,5 +65,9 @@ public class ConditionBlock extends Block {
         return true;
     }
 
+    public static void main(String[] args) {
+        System.out.println("check");
+    }
+
 
 }
