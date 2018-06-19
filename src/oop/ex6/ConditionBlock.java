@@ -20,8 +20,8 @@ public class ConditionBlock extends Block {
     private static final String SPECIFIC_CONDITION = "-?\\d+(\\.\\d+)?";
 
     ConditionBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable,
-                   HashMap<String,MethodBlock> methods) throws sJavaException {
-        super(parent, lines, localVariable, methods);
+                   HashMap<String, MethodBlock> methods) throws sJavaException {
+        super(parent, lines, localVariable);
         verifyCondition();
     }
 
@@ -65,10 +65,4 @@ public class ConditionBlock extends Block {
         } //TODO -- what if the condition was empty?
         return true;
     }
-
-    public static void main(String[] args) {
-        System.out.println("check");
-    }
-
-
 }

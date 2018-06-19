@@ -15,7 +15,7 @@ public class MethodBlock extends Block{
     private static final String MISSING_BRACKET = "Missing }";
     private static final String RETURN_SIGNATURE = "return;";
     private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
-    private static String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*{";
+    private static String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
 
     private String[] paramTypes;
     private String[] paramNames;
@@ -30,7 +30,8 @@ public class MethodBlock extends Block{
      * @throws sJavaException
      */
     MethodBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable,
-                HashMap<String, MethodBlock> methods) throws sJavaException {
+                HashMap<String, MethodBlock> methods)
+            throws sJavaException {
         super(parent, lines, localVariable, methods);
         checkMethodEnding();
         extractMethodComponents();
@@ -44,22 +45,27 @@ public class MethodBlock extends Block{
     }
 
     /**
-     * Sets method na
-     * @return an array of the methods parameters
+     * sets the method components
      */
-    private void extractMethodComponents() { // TODO: name, type array, check param
-        Pattern p = Pattern.compile(METHOD_SIGNATURE);
-        Matcher m = p.matcher(lines.getFirst());
-        if(m.matches()) {
-            String name = m.group(2);
+    private void extractMethodComponents() {
+        String methodSignature = lines.getFirst().trim();
+        String methodParamLine = methodSignature.substring((methodSignature.indexOf("(") + 1),
+                methodSignature.indexOf(")"));
+        String[] paramArray = methodParamLine.trim().split(",");
+        int paramNum = paramArray.length;
+        paramNames = new String[paramNum];
+        paramTypes = new String[paramNum];
+        for (int i = 0; i < paramArray.length; i++) {
+            paramArray[i] = paramArray[i].trim();
+            String[] paramElements = paramArray[i].split(" ");
+            paramTypes[i] = paramElements[0].trim();
+            paramNames[i] = paramElements[1].trim();
         }
-//        String[] paramArray = lines.getFirst().split(",");
-//        for (int i =0; i < paramArray.length; i++) {
-//            paramArray[i] = paramArray[i].trim();
-//            String[] paramElements = paramArray[i].split(" ");
-//            paramArray[i] = paramArray[i].trim();
-//        }
-//        paramTypes =  paramArray;
+        Pattern p = Pattern.compile(METHOD_SIGNATURE);
+        Matcher m = p.matcher(methodSignature);
+        if(m.matches()) {
+            methodName = m.group(2).trim();
+        }
     }
 
     /**
