@@ -104,9 +104,12 @@ public class VariableFactory {
     private boolean checkName(String name) throws sJavaException {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
         if (namePattern.matcher(name).matches() && !name.equals("_") && !variables.containsKey(name)) {
-            String[] arr = block.getParamNames();
+            String[] paramNames = block.getParamNames();
+            if(paramNames==null){
+                return true;
+            }
             boolean exists = false;
-            for(String param: arr) {
+            for(String param: paramNames) {
                 if (param.equals(name)) {
                     exists = true;
                 }

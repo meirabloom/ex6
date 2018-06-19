@@ -9,4 +9,10 @@ public class sJavaException extends Exception {
     sJavaException(String msg){
         super(msg);
     }
+
+    @Override
+    public String getLocalizedMessage() {
+        return super.getLocalizedMessage();
+    }
+
 }

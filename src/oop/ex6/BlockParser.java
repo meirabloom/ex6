@@ -1,10 +1,5 @@
 package oop.ex6;
 
-import sun.awt.image.ImageWatched;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -53,14 +48,14 @@ public class BlockParser {
      * @param block
      * @throws sJavaException
      */
-    void readBlock(LinkedList<String> lines, Block block) throws sJavaException {
+    public void readBlock(LinkedList<String> lines, Block block) throws sJavaException {
         for (String line: lines) {
             String type = parseLine(line);
             readLine(type, line, block);
-            for (Block newBlock : blocksToRead) {
-                blocksToRead.remove();
-                readBlock(innerBlockLines, newBlock);
-            }
+        }
+        for (Block newBlock : blocksToRead) {
+            blocksToRead.remove();
+            readBlock(innerBlockLines, newBlock);
         }
     }
 
@@ -129,6 +124,7 @@ public class BlockParser {
                 if(blockCounter==0){
                     if(block.getName().equals("global")) {
                         //global scope only has nested method blocks, no if\while blocks
+                        innerBlockLines.add(line);
                         MethodBlock newMethod = new MethodBlock(block, innerBlockLines, variables, methods);
                         if(methods.containsKey(newMethod.getMethodName())){
                             throw new sJavaException("method overloading");
@@ -147,7 +143,6 @@ public class BlockParser {
                 throw new sJavaException("Illegal line");
         }
     }
-
 
 
     /**
@@ -210,22 +205,23 @@ public class BlockParser {
      * @throws sJavaException - if there s an illegal method call, a call to un-initialized method or
      * invalid method params.
      */
-    public void checkMethodCall(String methodCallLine, HashMap<String, MethodBlock> methods) throws sJavaException {
+    public void checkMethodCall(String methodCallLine, HashMap<String, MethodBlock> methods)
+            throws sJavaException {
         Pattern methodLinePattern = Pattern.compile(METHOD_CALL);
         m = methodLinePattern.matcher(methodCallLine);
         String name;
         String params;
-        if(m.matches()){
+        if (m.matches()) {
             name = m.group(1);
             params = m.group(2);
-        }else{ throw new sJavaException("illegal method call"); }
-        if(!methods.containsKey(name)){ throw new sJavaException("call to un-initialized method");}
+        } else {
+            throw new sJavaException("illegal method call");
+        }
+        if (!methods.containsKey(name)) {
+            throw new sJavaException("call to un-initialized method");
+        }
         MethodBlock curMethod = methods.get(name);
-        curMethod.checkParams(params);
-//        LinkedList<String> allParams = parseParameters(params);
-//        if(allParams.size()!= curMethod.getParamTypes().length){
-//            throw new sJavaException("wrong num of params");
-//        }
+        curMethod.checkParamsInCall(params);
     }
 
 }

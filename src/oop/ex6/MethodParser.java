@@ -27,11 +27,7 @@ public class MethodParser {
     }
 
     public void checkMethod() throws sJavaException {
-        checkMethodEnding(methodLines.getLast(),methodLines.get(methodLines.size()-1));
-        String callLine = methodLines.getFirst();
-        String paramLine = callLine.substring(callLine.indexOf("(")+1,callLine.indexOf(")"));
-
-
+        checkMethodEnding(methodLines.getLast(),methodLines.get(methodLines.size()-2));
     }
 
 
@@ -42,7 +38,8 @@ public class MethodParser {
      * @throws sJavaException - if there s an illegal method call, a call to un-initialized method or
      * invalid method params.
      */
-    public void checkMethodCall(String methodCallLine, HashMap<String, MethodBlock> methods) throws sJavaException {
+    public void checkMethodCall(String methodCallLine, HashMap<String, MethodBlock> methods)
+            throws sJavaException {
         Pattern methodLinePattern = Pattern.compile(METHOD_CALL);
         m = methodLinePattern.matcher(methodCallLine);
         String name;
@@ -107,7 +104,7 @@ public class MethodParser {
      * checks if the method ends with a return statement and curly brackets
      * @throws sJavaException - an exception thrown if the method ends illegally
      */
-    private void checkMethodEnding(String returnStatement, String endStatement) throws sJavaException {
+    private void checkMethodEnding(String endStatement, String returnStatement ) throws sJavaException {
         Pattern endPattern = Pattern.compile(END_METHOD_SIGNATURE);
         Matcher m = endPattern.matcher(endStatement);
         if (!returnStatement.equals(RETURN_SIGNATURE)){

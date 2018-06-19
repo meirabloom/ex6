@@ -40,6 +40,7 @@ public class InitialParser {
                 if (!line.matches(EMPTY_LINE) && !line.startsWith(COMMENT_LINE)){
                     globalList.add(line);
                 }
+                line = bufferedReader.readLine();
             }
             bufferedReader.close();
         }

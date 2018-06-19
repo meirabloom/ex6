@@ -1,5 +1,6 @@
-package oop.ex6.main;
+package oop.ex6;
 
+import oop.ex6.BlockParser;
 import oop.ex6.GlobalBlock;
 import oop.ex6.InitialParser;
 import oop.ex6.sJavaException;
@@ -24,13 +25,17 @@ public class Sjavac {
             InitialParser firstParser = new InitialParser(file);
             LinkedList<String> allLines = firstParser.getLines();
             GlobalBlock global = new GlobalBlock(allLines);
-
-
+            BlockParser bp = new BlockParser();
+            bp.readBlock(allLines,global);
             System.out.println(LEGAL_CODE);
         }
        catch (IOException e) {
             System.out.println(IO_ERRORS);
             System.err.println(BAD_FILE_ERROR_MSG);
+        }
+        catch (sJavaException e){
+            System.out.println(ILLEGAL_CODE);
+            System.err.println(e.getLocalizedMessage());
         }
     }
 }

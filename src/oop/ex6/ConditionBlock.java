@@ -41,7 +41,7 @@ public class ConditionBlock extends Block {
         for (String condition : multipleConditions) {
             Matcher m = p.matcher(condition);
 
-            if(!m.matches()) {
+            if (!m.matches()) {
                 throw new sJavaException("Illegal condition");
             }
             condition = condition.trim();
@@ -52,16 +52,26 @@ public class ConditionBlock extends Block {
 
                 Variable variable = searchForVar(condition);
 
-                if(variable != null && variable.assigned) {
+                if (variable != null && variable.assigned) {
                     String varType = variable.varType;
                     if (!varType.equals(INT) && !varType.equals(DOUBLE) && !varType.equals(BOOLEAN)) {
                         throw new sJavaException("illegal condition variable assignment");
                     }
-                }
-                else {
+                } else {
                     throw new sJavaException("condition variable not assigned");
                 }
             }
         } //TODO -- what if the condition was empty?
+        verifyEnd();
+    }
+
+    /**
+     * verifies end of if while block
+     * @throws sJavaException
+     */
+    void verifyEnd() throws sJavaException {
+        if (!lines.getLast().trim().equals("}")) {
+            throw new sJavaException("condition block doesn't end in }");
+        }
     }
 }

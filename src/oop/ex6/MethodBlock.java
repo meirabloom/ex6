@@ -16,11 +16,13 @@ public class MethodBlock extends Block{
     private static final String RETURN_SIGNATURE = "return;";
     private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
     private static String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
+    private static final String NAME_PATTERN = "[^\\d\\s]\\S*";
 
     private String[] paramTypes;
     private String[] paramNames;
     private String methodName;
     private MethodParser methodParser;
+    private HashMap<String, MethodBlock> methods;
 
     /**
      * constructor
@@ -33,10 +35,10 @@ public class MethodBlock extends Block{
                 HashMap<String, MethodBlock> methods)
             throws sJavaException {
         super(parent, lines, localVariable, methods);
-        checkMethodEnding();
         extractMethodComponents();
         methodParser = new MethodParser(lines,this);
         methodParser.checkMethod();
+        this.methods = methods;
     }
 
     @Override
@@ -47,10 +49,13 @@ public class MethodBlock extends Block{
     /**
      * sets the method components
      */
-    private void extractMethodComponents() {
+    private void extractMethodComponents() throws sJavaException {
         String methodSignature = lines.getFirst().trim();
         String methodParamLine = methodSignature.substring((methodSignature.indexOf("(") + 1),
                 methodSignature.indexOf(")"));
+        if (methodParamLine.equals("")) {
+            return;
+        }
         String[] paramArray = methodParamLine.trim().split(",");
         int paramNum = paramArray.length;
         paramNames = new String[paramNum];
@@ -58,6 +63,9 @@ public class MethodBlock extends Block{
         for (int i = 0; i < paramArray.length; i++) {
             paramArray[i] = paramArray[i].trim();
             String[] paramElements = paramArray[i].split(" ");
+            checkParamName(paramElements[1]);
+            checkParamType(paramElements[0].trim());
+
             paramTypes[i] = paramElements[0].trim();
             paramNames[i] = paramElements[1].trim();
         }
@@ -68,22 +76,24 @@ public class MethodBlock extends Block{
         }
     }
 
-    /**
-     * checks if the method ends with a return statement and curly brackets
-     * @throws sJavaException - an exception thrown if the method ends illegally
-     */
-    private void checkMethodEnding() throws sJavaException {
-        Pattern endPattern = Pattern.compile(END_METHOD_SIGNATURE);
-        Matcher m = endPattern.matcher(lines.getLast());
-        if (!lines.get(lines.size()-1).equals(RETURN_SIGNATURE)){
-            throw new sJavaException(MISSING_RETURN_EXCEPTION);
-        }
-        if (!m.matches()) {
-            throw new sJavaException(MISSING_BRACKET);
+    private void checkParamName(String name) throws sJavaException {
+        Pattern namePattern = Pattern.compile(NAME_PATTERN);
+        if (namePattern.matcher(name).matches() && !name.equals("_")){
+            throw new sJavaException("illegal parameter name");
         }
     }
 
-    public void checkParams(String params) throws sJavaException {
+    private void checkParamType(String type) throws sJavaException {
+        boolean condition =
+                (type.equals("int") || type.equals("double") || type.equals("boolean")
+                        || type.equals("String") || type.equals("char"));
+        if(!condition) {
+            throw new sJavaException("wrong param type");
+        }
+
+    }
+
+    public void checkParamsInCall(String params) throws sJavaException {
         methodParser.checkMethodCall(params, methods);
     }
 
