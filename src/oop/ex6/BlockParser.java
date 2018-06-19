@@ -53,7 +53,7 @@ public class BlockParser {
      * @param block - current block to read
      * @throws sJavaException - if the line does not match any of the legal lines
      */
-    public void readBlock(String type, String line , Block block)
+    private void readLine(String type, String line , Block block)
             throws sJavaException {
         switch (type){
             case VARIABLE_INIT_LINE:
@@ -127,6 +127,32 @@ public class BlockParser {
             default:
                 throw new sJavaException("Illegal line");
         }
+    }
+
+    /**
+     *
+     * @param lines
+     * @param block
+     * @throws sJavaException
+     */
+    void readBlock(LinkedList<String> lines, Block block) throws sJavaException {
+        for (String line: lines) {
+            String type = parseLine(line);
+            readLine(type, line, block);
+            for (Block newBlock : blocksToRead) {
+                blocksToRead.remove();
+                readBlock(innerBlockLines, newBlock);
+            }
+        }
+    }
+
+    /**
+     * receives a line of code and determines the type of object
+     * @param line
+     * @return
+     */
+    private String parseLine(String line) {
+
     }
 
 

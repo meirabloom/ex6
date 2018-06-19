@@ -21,6 +21,7 @@ public class ConditionBlock extends Block {
     ConditionBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable)
             throws sJavaException {
         super(parent, lines, localVariable);
+        verifyCondition();
     }
 
     @Override
