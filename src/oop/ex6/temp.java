@@ -11,7 +11,7 @@ public class temp {
 
         try {
             LinkedList<String> s = new LinkedList<String>();
-            s.add("final int a=9;");
+            s.add("if(true){");
             s.add("int k = 8;");
             s.add("double r = 8.9086;");
             s.add("double b = r;");
@@ -28,6 +28,7 @@ public class temp {
             my.add("double b = r;");
             GlobalBlock gb = new GlobalBlock(s);
 
+            ConditionBlock cb = new ConditionBlock(gb,s,my);
             MethodBlock mb = new MethodBlock(gb,m,my);
 
            // String s = "(void)\\s+([a-zA-z]\\w*)\\s*+\\((.*)\\)\\s*{";

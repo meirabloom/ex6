@@ -32,18 +32,34 @@ public class BlockParser {
     private static final String VARIABLE_INIT_LINE = "varInit";
     private static final String METHOD_INIT_LINE = "methodInit";
     private static final String IF_WHILE_BLOCK_LINE = "ifWhileBlock";
-    private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     private static final String ASSIGNMENT = "=";
     private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
 
     // Regexs
-    static final String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*{";
-  //  static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
-    static final String VARIABLE_DECLERATION = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
-    static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;";
-    static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
+    private static final String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*{";
+    private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
+    private static final String VARIABLE_DECLERATION = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
+    private static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;";
+    private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
+    private static final String RETURN
 
 
+    /**
+     *
+     * @param lines
+     * @param block
+     * @throws sJavaException
+     */
+    void readBlock(LinkedList<String> lines, Block block) throws sJavaException {
+        for (String line: lines) {
+            String type = parseLine(line);
+            readLine(type, line, block);
+            for (Block newBlock : blocksToRead) {
+                blocksToRead.remove();
+                readBlock(innerBlockLines, newBlock);
+            }
+        }
+    }
 
     /**
      * Receives a line from a block and acts according to the line type. This Method also adds new nested
@@ -130,34 +146,26 @@ public class BlockParser {
         }
     }
 
-    /**
-     *
-     * @param lines
-     * @param block
-     * @throws sJavaException
-     */
-    void readBlock(LinkedList<String> lines, Block block) throws sJavaException {
-        for (String line: lines) {
-            String type = parseLine(line);
-            readLine(type, line, block);
-            for (Block newBlock : blocksToRead) {
-                blocksToRead.remove();
-                readBlock(innerBlockLines, newBlock);
-            }
-        }
-    }
+
 
     /**
-     * receives a line of code and determines the type of object
+     * receives a line of code and determines the type of line
      * @param line - the code line to check
      * @return - the name of the type of line
      */
     private String parseLine(String line) {
-
+        Pattern varInitPattern =
 
     }
 
 
+    /**
+     * Checks variable assignment is legal
+     * @param line - assignment line
+     * @param block - current block
+     * @throws sJavaException - if assignment is illegal: if variables not found, if Variable not assigned
+     * or if there are incompatible types.
+     */
     void checkVarAssignment(String line, Block block) throws sJavaException {
         String[] variables = line.split("=");
         for (String var : variables) {
