@@ -69,9 +69,6 @@ public class VariableFactory {
                     }
                     if (newMatcher.matches()) { // oneVar is assigned
                         String value = newMatcher.group(VALUE_PLACE);
-                        if(!value.contains("\"")){ // assignment to existing object
-                            // value = getVar(value).getValue()
-                        }
                         if (!checkValue(type, newMatcher.group(VALUE_PLACE).trim())) {
                             throw new sJavaException("incompatible value");
                         }
@@ -129,7 +126,7 @@ public class VariableFactory {
      * @return true if the type is compatible, false otherwise.
      * @throws sJavaException - if the type is unrecognized
      */
-    private boolean checkValue(String type, String value) throws sJavaException{ //TODO: check if val exists
+    private boolean checkValue(String type, String value) throws sJavaException{
         Pattern doublePattern = Pattern.compile(DOUBLE_PATTERN);
         Pattern intPattern = Pattern.compile(INT_PATTERN);
         Pattern strPattern = Pattern.compile(STR_PATTERN);
@@ -142,7 +139,7 @@ public class VariableFactory {
             }
             Variable var = block.searchForVar(value);
             if(var!=null){ // assignment to variable from outer scope
-                return var.varType.equals(type);
+                return var.checkAssignment(type,block);
             }
         }
 

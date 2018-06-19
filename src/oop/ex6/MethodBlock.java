@@ -29,6 +29,7 @@ public class MethodBlock extends Block{
      */
     MethodBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable) throws sJavaException {
         super(parent, lines, localVariable);
+        // Method parser. check method
         checkMethodEnding();
         extractMethodComponents();
     }
