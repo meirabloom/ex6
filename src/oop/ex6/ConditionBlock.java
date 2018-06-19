@@ -21,7 +21,7 @@ public class ConditionBlock extends Block {
 
     ConditionBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable,
                    HashMap<String, MethodBlock> methods) throws sJavaException {
-        super(parent, lines, localVariable);
+        super(parent, lines, localVariable, methods);
         verifyCondition();
     }
 
@@ -30,7 +30,7 @@ public class ConditionBlock extends Block {
         return "condition";
     }
 
-    private boolean verifyCondition() throws sJavaException {
+    private void verifyCondition() throws sJavaException {
         String[] multipleConditions;
         String conditionLine;
         String conditionSignature = lines.getFirst();
@@ -63,6 +63,5 @@ public class ConditionBlock extends Block {
                 }
             }
         } //TODO -- what if the condition was empty?
-        return true;
     }
 }
