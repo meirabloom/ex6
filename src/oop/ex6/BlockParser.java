@@ -87,7 +87,7 @@ public class BlockParser {
                 break;
 
             case IF_WHILE_BLOCK_LINE:
-                if(block.getName().equals("global")){
+                if(block.parent.getName().equals("global")){
                     throw new sJavaException("If or While block not in method");
                 }
                 blockCounter++;

@@ -78,7 +78,7 @@ public class MethodBlock extends Block{
 
     private void checkParamName(String name) throws sJavaException {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
-        if (namePattern.matcher(name).matches() && !name.equals("_")){
+        if (!namePattern.matcher(name).matches() && !name.equals("_")){
             throw new sJavaException("illegal parameter name");
         }
     }
