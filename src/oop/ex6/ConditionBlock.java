@@ -13,17 +13,23 @@ public class ConditionBlock extends Block {
     private static final String DOUBLE = "double";
     private static final String TRUE = "true";
     private static final String FALSE = "false";
+    private static final int CONDITION_BRACKET_FACTOR = 1;
+
     //regex
     private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
     private static final String AND_OR = "(&&)|(\\|\\|)";
     private static final String REQUIRED_CONDITION = "\\s*(true|false)|(\\d+\\.?\\d*)|([^\\d\\s]\\S*)";
     private static final String SPECIFIC_CONDITION = "-?\\d+(\\.\\d+)?";
 
-    ConditionBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable,
+    ConditionBlock(Block parent, LinkedList<String> lines,
                    HashMap<String, MethodBlock> methods) throws sJavaException {
-        super(parent, lines, localVariable, methods);
+        super(parent, lines,  methods,CONDITION_BRACKET_FACTOR);
         verifyCondition();
-    }
+        String header = super.lines.getFirst();
+        String end = super.lines.getLast();
+        super.lines.remove(header);
+        super.lines.remove(end);
+        }
 
     @Override
     public String getName() {

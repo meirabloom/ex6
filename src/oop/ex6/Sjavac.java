@@ -25,7 +25,7 @@ public class Sjavac {
             InitialParser firstParser = new InitialParser(file);
             LinkedList<String> allLines = firstParser.getLines();
             GlobalBlock global = new GlobalBlock(allLines);
-            BlockParser bp = new BlockParser();
+            BlockParser bp = new BlockParser(global);
             bp.readBlock(allLines,global);
             System.out.println(LEGAL_CODE);
         }

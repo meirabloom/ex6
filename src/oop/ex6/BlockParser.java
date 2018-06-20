@@ -12,12 +12,11 @@ import java.util.regex.Pattern;
 public class BlockParser {
 
     private LinkedList<String> innerBlockLines = new LinkedList<String>();
-    private LinkedList<String> variables = new LinkedList<String>();
     private HashMap<String, MethodBlock> methods = new  HashMap<String, MethodBlock>();
     private Matcher m;
 
     private int blockCounter = 0;
-    private Queue<Block> blocksToRead = new LinkedList<Block>();
+    private Queue<Block> blocksToRead;
 
 
     //constants
@@ -41,7 +40,13 @@ public class BlockParser {
     private static final String RETURN = "\\s*return;\\s*";
     private static final String BLOCK_END = "\\s*}\\s*";
 
+    Block global;
 
+    BlockParser(Block global){
+        this.global = global;
+        blocksToRead = new LinkedList<Block>();
+       // blocksToRead.add(global);
+    }
 
     /**
      *
@@ -74,15 +79,14 @@ public class BlockParser {
             throws sJavaException {
         switch (type){
             case VARIABLE_INIT_LINE:
-                if(blockCounter==0){
-                    variables.add(line);
-                }else{
+                if(blockCounter>0){
                     innerBlockLines.add(line);
                 }
                 break;
 
             case METHOD_INIT_LINE:
-                if(!block.getName().equals("global")){
+                if(!block.getName().equals("global") &&
+                        !(block.parent.getName().equals("global") && block.lines.getFirst().equals(line))){
                     throw new sJavaException("method declared outside main block");
                 }
                 blockCounter++;
@@ -109,7 +113,7 @@ public class BlockParser {
                     innerBlockLines.add(line);
                 }
                 break;
-            case VARIABLE_ASSIGNMENT:
+            case VARIABLE_ASSIGNMENT_LINE:
                 if(blockCounter==0){
                     checkVarAssignment(line,block);
                 }else{
@@ -127,20 +131,20 @@ public class BlockParser {
                     innerBlockLines.add(line);
                 }
                 if(blockCounter==0){
-                    if(block.getName().equals("global")) {
-                        //global scope only has nested method blocks, no if\while blocks
-                        innerBlockLines.add(line);
-                        MethodBlock newMethod = new MethodBlock(block, innerBlockLines, variables, methods);
-                        if(methods.containsKey(newMethod.getMethodName())){
-                            throw new sJavaException("method overloading");
+                        if (block.getName().equals("global")) {
+                            //global scope only has nested method blocks, no if\while blocks
+                            innerBlockLines.add(line);
+                            MethodBlock newMethod = new MethodBlock(block, innerBlockLines,  methods);
+                            if (methods.containsKey(newMethod.getMethodName())) {
+                                throw new sJavaException("method overloading");
+                            }
+                            blocksToRead.add(newMethod);
+                            methods.put(newMethod.getMethodName(), newMethod);
+                        } else {
+                            blocksToRead.add(new ConditionBlock(block, innerBlockLines, methods));
                         }
-                        blocksToRead.add(newMethod);
-                        methods.put(newMethod.getMethodName(),newMethod);
-                    } else {
-                        blocksToRead.add(new ConditionBlock(block, innerBlockLines, variables, methods));
-                    }
-                    innerBlockLines.clear();
-                    variables.clear();
+
+                        innerBlockLines = new LinkedList<>();
                 }
                 break;
 

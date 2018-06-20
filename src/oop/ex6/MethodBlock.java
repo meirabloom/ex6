@@ -17,6 +17,7 @@ public class MethodBlock extends Block{
     private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
     private static String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
     private static final String NAME_PATTERN = "[^\\d\\s]\\S*";
+    private static final int METHOD_BRACKET_FACTOR = 1;
 
     private String[] paramTypes;
     private String[] paramNames;
@@ -28,17 +29,20 @@ public class MethodBlock extends Block{
      * constructor
      * @param parent - the global block in which the method is nested
      * @param lines
-     * @param localVariable
      * @throws sJavaException
      */
-    MethodBlock(Block parent, LinkedList<String> lines, LinkedList<String> localVariable,
+    MethodBlock(Block parent, LinkedList<String> lines,
                 HashMap<String, MethodBlock> methods)
             throws sJavaException {
-        super(parent, lines, localVariable, methods);
+        super(parent, lines,  methods,METHOD_BRACKET_FACTOR);
         extractMethodComponents();
         methodParser = new MethodParser(lines,this);
         methodParser.checkMethod();
         this.methods = methods;
+        String header = super.lines.getFirst();
+        String end = super.lines.getLast();
+        super.lines.remove(header);
+        super.lines.remove(end);
     }
 
     @Override
