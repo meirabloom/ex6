@@ -14,7 +14,7 @@ public class MethodParser {
 
     private static final String MISSING_RETURN_EXCEPTION = "missing proper return statement";
     private static final String MISSING_BRACKET = "Missing }";
-    private static final String RETURN_SIGNATURE = "return;";
+    private static final String RETURN_SIGNATURE = "\\s*return;\\s*";
     private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     private static final String ASSIGNMENT = "=";
     private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
@@ -105,12 +105,10 @@ public class MethodParser {
      * @throws sJavaException - an exception thrown if the method ends illegally
      */
     private void checkMethodEnding(String endStatement, String returnStatement ) throws sJavaException {
-        Pattern endPattern = Pattern.compile(END_METHOD_SIGNATURE);
-        Matcher m = endPattern.matcher(endStatement);
-        if (!returnStatement.equals(RETURN_SIGNATURE)){
-            throw new sJavaException(MISSING_RETURN_EXCEPTION);
+        if(!Pattern.compile(RETURN_SIGNATURE).matcher(returnStatement).matches()){
+               throw new sJavaException(MISSING_RETURN_EXCEPTION);
         }
-        if (!m.matches()) {
+        if (!Pattern.compile(END_METHOD_SIGNATURE).matcher(endStatement).matches()) {
             throw new sJavaException(MISSING_BRACKET);
         }
     }

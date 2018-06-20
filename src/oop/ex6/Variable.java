@@ -33,29 +33,5 @@ public class Variable {
         isGlobal = true;
     }
 
-
-    public boolean checkTypeAssignment(String otherVarType) throws sJavaException {
-        switch (otherVarType){
-            case("int"):
-                return (this.varType.equals("int"));
-            case("double"):
-                return (this.varType.equals("int") || this.varType.equals("double"));
-
-            case("boolean"):
-                return (this.varType.equals("int") || this.varType.equals("double") ||
-                        this.varType.equals("boolean"));
-
-            case("String"):
-                return (this.varType.equals("String"));
-
-            case("char"):
-                return (this.varType.equals("char"));
-
-                default:
-                    throw new sJavaException("unrecognized type");
-        }
-    }
-
-
 }
 

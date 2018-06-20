@@ -3,6 +3,7 @@ package oop.ex6;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.SplittableRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,10 +33,10 @@ public class BlockParser {
     private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
 
     // Regexs
-    private static final String METHOD_INIT = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{";
+    private static final String METHOD_INIT = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
     private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
-    private static final String VARIABLE_INIT = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
-    private static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;";
+    private static final String VARIABLE_INIT = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s*(.*)(;)\\s*";
+    private static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;\\s*";
     private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
     private static final String RETURN = "\\s*return;\\s*";
     private static final String BLOCK_END = "\\s*}\\s*";
@@ -61,9 +62,9 @@ public class BlockParser {
             String type = parseLine(line);
             readLine(type, line, block);
         }
-        for (Block newBlock : blocksToRead) { //TODO the prob is that the methods get here
-            // with line as an empty array, we need to figure out why
+        for (Block newBlock : blocksToRead) {
             blocksToRead.remove();
+            innerBlockLines = new LinkedList<String>();
             readBlock(newBlock.lines, newBlock);
         }
      }
@@ -116,14 +117,18 @@ public class BlockParser {
                 break;
             case VARIABLE_ASSIGNMENT_LINE:
                 if(blockCounter==0){
-                    checkVarAssignment(line,block);
+                    //checkVarAssignment(line,block);
                 }else{
                     innerBlockLines.add(line);
                 }
                 break;
 
             case RETURN_LINE:
-                innerBlockLines.add(line);
+                if(blockCounter==0 && (block.getName().equals("global"))){
+                    throw new sJavaException("return in global scope");
+                }if(blockCounter > 0) {
+                    innerBlockLines.add(line);
+                }
                 break;
 
             case BLOCK_END_LINE:
@@ -189,34 +194,34 @@ public class BlockParser {
     }
 
 
-    /**
-     * Checks variable assignment is legal
-     * @param line - assignment line
-     * @param block - current block
-     * @throws sJavaException - if assignment is illegal: if variables not found, if Variable not assigned
-     * or if there are incompatible types.
-     */
-    void checkVarAssignment(String line, Block block) throws sJavaException {
-        String[] variables = line.split("=");
-        for (String var : variables) {
-            var.trim();
-        }
-        Variable var1 = block.searchForVar(variables[0]);
-    }
-//        if(Pattern.compile(NEW_VAL_PATTERN).matcher(variables[1]).matches()) {
-//
-//        }else{
-//            Variable var2 = block.searchForVar(variables[1]);
-//            if (var1 == null || var2 == null) {
-//                throw new sJavaException("variables not found");
-//            }
-//            if (!var2.assigned) {
-//                throw new sJavaException("Variable not assigned");
-//            }
-//            if (!var2.checkTypeAssignment(var1.varType)) {
-//                throw new sJavaException("incompatible types");
-//            }
+//    /**
+//     * Checks variable assignment is legal
+//     * @param line - assignment line
+//     * @param block - current block
+//     * @throws sJavaException - if assignment is illegal: if variables not found, if Variable not assigned
+//     * or if there are incompatible types.
+//     */
+//    void checkVarAssignment(String line, Block block) throws sJavaException {
+//        String[] variables = line.split("=");
+//        for (String var : variables) {
+//            var.trim();
 //        }
+//        Variable var1 = block.searchForVar(variables[0]);
+//    }
+////        if(Pattern.compile(NEW_VAL_PATTERN).matcher(variables[1]).matches()) {
+////
+////        }else{
+////            Variable var2 = block.searchForVar(variables[1]);
+////            if (var1 == null || var2 == null) {
+////                throw new sJavaException("variables not found");
+////            }
+////            if (!var2.assigned) {
+////                throw new sJavaException("Variable not assigned");
+////            }
+////            if (!var2.checkTypeAssignment(var1.varType)) {
+////                throw new sJavaException("incompatible types");
+////            }
+////        }
 
     /**
      * Checks if method call is ok: checks if the structure of the call follows expected structure, checks

@@ -7,56 +7,44 @@ import java.util.regex.Pattern;
 
 public abstract class Block {
 
-    private static final String VARIABLE_INIT = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)";
+    private static final String VARIABLE_INIT =
+            "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)\\s*";
+    private static final String VARIABLE_ASSIGNMENT = "(\\w+)\\s*(=)\\s*(.*);\\s*";
 
     Block parent;
     HashMap<String, Variable> localVariables;
     LinkedList<String> lines;
-    LinkedList<Variable> globalVariables;
     HashMap<String, MethodBlock> methods;
+    VariableFactory factory;
 
 
     //constructors
 
-    /**
-     * default constructor
-     */
-    Block() {
-    }
-
-//    /**
-//     * a constructor of a parentless block (the global block)
-//     */
-//    public Block(LinkedList<String> lines, int factor) {
-//        this.parent = null;
-//        this.lines = lines;
-//        this.methods = new HashMap<String, MethodBlock>();
-//        this.globalVariables = new LinkedList<Variable>();
-//    }
 
     /**
      *
      * @param parent
      * @param lines
-     * @param localVariable
      * @param methods
      * @throws sJavaException
      */
     public Block(Block parent, LinkedList<String> lines,
                  HashMap<String, MethodBlock> methods, int factor) throws sJavaException {
+
         this.parent = parent;
         this.lines = lines;
         LinkedList<String> varToSet = extractVariables(factor);
-        VariableFactory factory = new VariableFactory(varToSet, this);
+        this.factory = new VariableFactory(varToSet, this);
+     //   HashMap<String,Variable> hm = factory.getVariables();
         this.localVariables = factory.getVariables();
+        checkVarAssignment(factor);
         this.methods = methods;
 
     }
 
-    public LinkedList<String> extractVariables(int factor) {
+    private LinkedList<String> extractVariables(int factor) throws sJavaException {
         int bracketCounter = 0;
         LinkedList<String> variables = new LinkedList<String>();
-        Pattern variablePattern = Pattern.compile(VARIABLE_INIT);
         for (String line : lines) {
             if (line.contains("{")) {
                 bracketCounter++;
@@ -64,7 +52,7 @@ public abstract class Block {
             if (line.contains("}")) {
                 bracketCounter--;
             }
-            if (variablePattern.matcher(line).matches()) {
+            if (Pattern.compile(VARIABLE_INIT).matcher(line).matches()) {
                 if (bracketCounter == factor) {
                     variables.add(line);
                 }
@@ -73,6 +61,28 @@ public abstract class Block {
         return variables;
     }
 
+    private void checkVarAssignment(int factor) throws sJavaException {
+        int bracketCounter = 0;
+        for (String line : lines) {
+            if (line.contains("{")) {
+                bracketCounter++;
+            }
+            if (line.contains("}")) {
+                bracketCounter--;
+            }
+            if(Pattern.compile(VARIABLE_ASSIGNMENT).matcher(line).matches()) {
+                if(bracketCounter == factor) {
+                    String[] variables = line.split("=");
+                    String firstVar = variables[0].trim();
+                    String assignmentVar = variables[1].substring(0, variables[1].indexOf(";")).trim();
+                    Variable var1 = this.searchForVar(firstVar);
+                    if(var1 == null) { return;}
+                    if(!factory.checkValue(var1.varType,assignmentVar)){
+                        throw new sJavaException("wrong type assigned to variable");}
+                }
+            }
+        }
+    }
 
     /**
      *
@@ -82,7 +92,7 @@ public abstract class Block {
     Variable searchForVar(String varName){
         Variable searchVar = null;
         Block curBlock = this;
-        while(curBlock.parent!=null){
+        while(curBlock!=null){
             if(curBlock.localVariables!=null) {
                 if (curBlock.localVariables.containsKey(varName)) {
                     searchVar = curBlock.localVariables.get(varName);
@@ -96,6 +106,8 @@ public abstract class Block {
     public abstract String getName();
 
     public String[] getParamNames(){return null;}
+    public String[] getParamTypes(){return null;}
+
 
     public void setVariables(LinkedList<String> variables) throws sJavaException {}
 

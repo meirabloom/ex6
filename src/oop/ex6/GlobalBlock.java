@@ -8,8 +8,8 @@ import java.util.LinkedList;
  */
 public class GlobalBlock extends Block {
 
-    LinkedList<String> lines =new LinkedList<String>();
-    HashMap<String, Variable> localVariables;
+    //LinkedList<String> lines =new LinkedList<String>();
+   // HashMap<String, Variable> localVariables;
 
     /**
      * constructor

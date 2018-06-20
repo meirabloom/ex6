@@ -11,13 +11,11 @@ import java.util.regex.Pattern;
 public class MethodBlock extends Block{
 
     //Constants
-    private static final String MISSING_RETURN_EXCEPTION = "missing proper return statement";
-    private static final String MISSING_BRACKET = "Missing }";
-    private static final String RETURN_SIGNATURE = "return;";
-    private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
     private static String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
     private static final String NAME_PATTERN = "[^\\d\\s]\\S*";
+    private static final String EMPTY_PATTERN = "\\s*";
     private static final int METHOD_BRACKET_FACTOR = 1;
+    private static final String VARIABLE = "\\s*(int|double|String|boolean|char)\\s*([^\\d\\s]\\S*)";
 
     private String[] paramTypes;
     private String[] paramNames;
@@ -57,7 +55,7 @@ public class MethodBlock extends Block{
         String methodSignature = lines.getFirst().trim();
         String methodParamLine = methodSignature.substring((methodSignature.indexOf("(") + 1),
                 methodSignature.indexOf(")"));
-        if (methodParamLine.equals("")) {
+        if (Pattern.compile(EMPTY_PATTERN).matcher(methodParamLine).matches()) {
             return;
         }
         String[] paramArray = methodParamLine.trim().split(",");
@@ -65,11 +63,9 @@ public class MethodBlock extends Block{
         paramNames = new String[paramNum];
         paramTypes = new String[paramNum];
         for (int i = 0; i < paramArray.length; i++) {
+            if(paramArray[i].equals("")){ throw new sJavaException("illegal param line");}
             paramArray[i] = paramArray[i].trim();
-            String[] paramElements = paramArray[i].split(" ");
-            checkParamName(paramElements[1]);
-            checkParamType(paramElements[0].trim());
-
+            String[] paramElements = getTypeAndName(paramArray[i]);//, paramNames);
             paramTypes[i] = paramElements[0].trim();
             paramNames[i] = paramElements[1].trim();
         }
@@ -80,10 +76,37 @@ public class MethodBlock extends Block{
         }
     }
 
+
+
+    /**
+     * receives a line of "type varName" where type is the type and var is the var name and returns a list
+     * where the first element is the type and the second element is the name.
+     * @param line
+     * @return
+     */
+    private String[] getTypeAndName(String line) throws sJavaException {
+        String[] typeAndName = new String[2];
+        Pattern varPattern = Pattern.compile(VARIABLE);
+        Matcher m = varPattern.matcher(line);
+        if(m.matches()){
+            typeAndName[0] = m.group(1);
+            typeAndName[1] = m.group(2);
+            checkParamType(typeAndName[0]);
+            checkParamName(typeAndName[1]);
+
+       }else{
+            throw new sJavaException("illegal parameters");
+        }
+        return typeAndName;
+    }
+
     private void checkParamName(String name) throws sJavaException {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
         if (!namePattern.matcher(name).matches() && !name.equals("_")){
             throw new sJavaException("illegal parameter name");
+        }
+        for(String param:paramNames){
+            if(name.equals(param)) { throw new sJavaException("repetitive param name ");}
         }
     }
 
@@ -101,6 +124,7 @@ public class MethodBlock extends Block{
         methodParser.checkMethodCall(params, methods);
     }
 
+    @Override
     public String[] getParamTypes(){ return paramTypes;}
 
     @Override
