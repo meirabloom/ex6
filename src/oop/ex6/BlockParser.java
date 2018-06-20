@@ -131,9 +131,9 @@ public class BlockParser {
                     innerBlockLines.add(line);
                 }
                 if(blockCounter==0){
-                        if (block.getName().equals("global")) {
+                    innerBlockLines.add(line);
+                    if (block.getName().equals("global")) {
                             //global scope only has nested method blocks, no if\while blocks
-                            innerBlockLines.add(line);
                             MethodBlock newMethod = new MethodBlock(block, innerBlockLines,  methods);
                             if (methods.containsKey(newMethod.getMethodName())) {
                                 throw new sJavaException("method overloading");
