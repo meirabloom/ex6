@@ -39,6 +39,7 @@ public class BlockParser {
     private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
     private static final String RETURN = "\\s*return;\\s*";
     private static final String BLOCK_END = "\\s*}\\s*";
+    private static final String NEW_VAL_PATTERN = "(\\d+\\.?\\d*)|(\"[a-zA-Z]+\")";
 
     Block global;
 
@@ -201,11 +202,21 @@ public class BlockParser {
             var.trim();
         }
         Variable var1 = block.searchForVar(variables[0]);
-        Variable var2 = block.searchForVar(variables[1]);
-        if(var1==null || var2==null){ throw new sJavaException("variables not found");}
-        if(!var2.assigned){ throw new sJavaException("Variable not assigned");}
-        if(!var2.checkAssignment(var1.varType)){ throw new sJavaException("incompatible types");}
     }
+//        if(Pattern.compile(NEW_VAL_PATTERN).matcher(variables[1]).matches()) {
+//
+//        }else{
+//            Variable var2 = block.searchForVar(variables[1]);
+//            if (var1 == null || var2 == null) {
+//                throw new sJavaException("variables not found");
+//            }
+//            if (!var2.assigned) {
+//                throw new sJavaException("Variable not assigned");
+//            }
+//            if (!var2.checkTypeAssignment(var1.varType)) {
+//                throw new sJavaException("incompatible types");
+//            }
+//        }
 
     /**
      * Checks if method call is ok: checks if the structure of the call follows expected structure, checks

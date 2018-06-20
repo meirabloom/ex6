@@ -15,7 +15,6 @@ public class VariableFactory {
     private static final String CHAR_PATTERN = "\"[a-zA-Z]\"";
     private static final String NAME_PATTERN = "[^\\d\\s]\\S*";
     private static final String NEW_VAL_PATTERN = "(\\d+\\.?\\d*)|(\"[a-zA-Z]+\")";
-    //private static final String ASSIGNED_PATTERN = ".*";
     private static final String ASSIGNED_PATTERN = "(\\w+)\\s*(=)\\s*(.*)";
     private static final boolean UNASSIGNED = false;
     private static final boolean ASSIGNED = true;
@@ -142,7 +141,7 @@ public class VariableFactory {
             }
             Variable var = block.searchForVar(value);
             if(var!=null){ // assignment to variable from outer scope
-                return var.checkAssignment(type);
+                return var.checkTypeAssignment(type);
             }
         }
 
