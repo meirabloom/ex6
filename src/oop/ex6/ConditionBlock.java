@@ -51,9 +51,6 @@ public class ConditionBlock extends Block {
         for (String condition : multipleConditions) {
             Matcher m = Pattern.compile(REQUIRED_CONDITION).matcher(condition);
 
-            if (!m.matches()) {
-                throw new sJavaException("Illegal condition");
-            }
             condition = condition.trim();
             Pattern p = Pattern.compile(SPECIFIC_CONDITION);
             m = p.matcher(condition);
@@ -70,6 +67,9 @@ public class ConditionBlock extends Block {
                 } else {
                     throw new sJavaException("condition variable not assigned");
                 }
+            }
+            else if (!m.matches()) {
+                throw new sJavaException("Illegal condition");
             }
         } //TODO -- what if the condition was empty?
         verifyEnd();
