@@ -43,7 +43,7 @@ public class BlockParser {
     private static final String BLOCK_END = "\\s*}\\s*";
     private static final String NEW_VAL_PATTERN = "(\\d+\\.?\\d*)|(\"[a-zA-Z]+\")";
 
-    Block global;
+    Block global; MethodBlock curr;
 
     public BlockParser(Block global){
         this.global = global;
@@ -57,8 +57,8 @@ public class BlockParser {
      * @param block
      * @throws sJavaException
      */
-    public void readBlock(LinkedList<String> lines, Block block) throws sJavaException {
-
+    public void readBlock(LinkedList<String> lines, Block block, MethodBlock method) throws sJavaException {
+        curr = method;
         for (String line: lines) {
             String type = parseLine(line);
             readLine(type, line, block);
@@ -66,7 +66,8 @@ public class BlockParser {
         for (Block newBlock : blocksToRead) {
             blocksToRead.remove();
             innerBlockLines = new LinkedList<String>();
-            readBlock(newBlock.lines, newBlock);
+            MethodBlock a = block.getName().equals("global") ?(MethodBlock) newBlock : method;
+            readBlock(newBlock.lines, newBlock, a);
         }
      }
 
@@ -247,7 +248,7 @@ public class BlockParser {
             throw new sJavaException("call to un-initialized method");
         }
         MethodBlock curMethod = methods.get(name);
-        curMethod.checkParamsInCall(params);
+        curr.checkParamsInCall(methodCallLine);
     }
 
 }

@@ -2,6 +2,7 @@ package oop.ex6;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -10,6 +11,7 @@ public abstract class Block {
     private static final String VARIABLE_INIT =
             "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)\\s*";
     private static final String VARIABLE_ASSIGNMENT = "(\\w+)\\s*(=)\\s*(.*);\\s*";
+    private static final String METHOD_INIT = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
 
     Block parent;
     HashMap<String, Variable> localVariables;
@@ -56,6 +58,36 @@ public abstract class Block {
                 if (bracketCounter == factor) {
                     variables.add(line);
                 }
+            }
+            if (Pattern.matches(METHOD_INIT,line) && bracketCounter == factor) {
+                Matcher m = Pattern.compile(METHOD_INIT).matcher(line);
+                if (m.matches()){
+                    String param = m.group(3);
+                    String[] allParams = param.trim().split(",");
+                    if (!(allParams.length == 1 && allParams[0].equals(""))) {
+                        for (String string : allParams) {
+                            String type = string.substring(0, string.indexOf(' '));
+                            switch (type) {
+                                case "int":
+                                case "double":
+                                case "boolean":
+                                    string +="=0;";
+                                    break;
+                                case "String":
+                                    string += "= \"\";";
+                                    break;
+                                case "char":
+                                    string += "= \'\';";
+                                    break;
+                                    default:
+                                        throw new sJavaException("wrong parameter type");
+                            }
+                            variables.add(string);
+                        }
+                    }
+
+                }
+
             }
         }
         return variables;
