@@ -22,7 +22,8 @@ public class ConditionBlock extends Block {
     //regex
     private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
     private static final String AND_OR = "(&&)|(\\|\\|)";
-    private static final String REQUIRED_CONDITION = "\\s*(true|false)|(\\d+\\.?\\d*)|([^\\d\\s]\\S*)";
+    private static final String REQUIRED_CONDITION = "\\s*(true|false)\\s*|(\\s*\\d+\\.?\\d*\\s*)|" +
+            "([^\\d\\s]\\S*)";
     private static final String SPECIFIC_CONDITION = "-?\\d+(\\.\\d+)?";
 
     ConditionBlock(Block parent, LinkedList<String> lines,
@@ -47,15 +48,14 @@ public class ConditionBlock extends Block {
         conditionLine = conditionSignature.substring((conditionSignature.indexOf("(") + 1),
                 conditionSignature.indexOf(")"));
         multipleConditions = conditionLine.trim().split(AND_OR);
-        Pattern p = Pattern.compile(REQUIRED_CONDITION);
         for (String condition : multipleConditions) {
-            Matcher m = p.matcher(condition);
+            Matcher m = Pattern.compile(REQUIRED_CONDITION).matcher(condition);
 
             if (!m.matches()) {
                 throw new sJavaException("Illegal condition");
             }
             condition = condition.trim();
-            p = Pattern.compile(SPECIFIC_CONDITION);
+            Pattern p = Pattern.compile(SPECIFIC_CONDITION);
             m = p.matcher(condition);
 
             if (!condition.equals(TRUE) && !condition.equals(FALSE) && !m.matches()) {
