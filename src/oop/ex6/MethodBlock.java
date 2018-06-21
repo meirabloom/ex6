@@ -14,10 +14,11 @@ public class MethodBlock extends Block{
 
     //Constants
     private static String METHOD_SIGNATURE = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
-    private static final String NAME_PATTERN = "[^\\d\\s]\\S*";
+    private static final String NAME_PATTERN = "([^_\\s\\d]\\w*|_\\w+)\\s*";
     private static final String EMPTY_PATTERN = "\\s*";
     private static final int METHOD_BRACKET_FACTOR = 1;
-    private static final String VARIABLE = "\\s*(int|double|String|boolean|char)\\s*([^\\d\\s]\\S*)";
+    private static final String VARIABLE =
+            "\\s*(int|double|String|boolean|char)\\s*(([^_\\s\\d]\\w*|_\\w+)\\s*)";
 
     private String[] paramTypes;
     private String[] paramNames;
