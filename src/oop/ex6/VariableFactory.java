@@ -17,7 +17,7 @@ public class VariableFactory {
     private static final String INT_PATTERN = "-?\\d+";
     private static final String STR_PATTERN = "\"[a-zA-Z]*\"";
     private static final String CHAR_PATTERN = "\'\\s*.\\s*\'";
-    private static final String NAME_PATTERN = "[^\\d\\s]\\S*";
+    private static final String NAME_PATTERN = "([^_\\s\\d]\\w*|_\\w+)\\s*";
     private static final String NEW_VAL_PATTERN = "(-?\\d+\\.?\\d*)|(\"[a-zA-Z]+\")";
     private static final String ASSIGNED_PATTERN = "\\s*(\\w+)\\s*(=)\\s*(.*)";
     private static final boolean UNASSIGNED = false;

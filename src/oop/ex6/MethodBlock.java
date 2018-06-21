@@ -51,26 +51,45 @@ public class MethodBlock extends Block{
         return "method";
     }
 
-    /**
-     * sets the method components
-     */
-    private void extractMethodComponents() throws sJavaException {
-        String methodSignature = lines.getFirst().trim();
-        String methodParamLine = methodSignature.substring((methodSignature.indexOf("(") + 1),
-                methodSignature.indexOf(")"));
-        Pattern p = Pattern.compile(METHOD_SIGNATURE);
-        Matcher m = p.matcher(methodSignature);
-        if(m.matches()) {
-            methodName = m.group(2).trim();
-        }
-        String[] paramArray = methodParamLine.trim().split(",");
-        if (Pattern.compile(EMPTY_PATTERN).matcher(methodParamLine).matches()) {
-            numOfParams=0;
-            return;
-        }
-        numOfParams = paramArray.length;
-        paramNames = new String[numOfParams];
-        paramTypes = new String[numOfParams];
+//    /**
+//     * sets the method components
+//     */
+//    private void extractMethodComponents() throws sJavaException {
+//        String methodSignature = lines.getFirst().trim();
+//        String methodParamLine = methodSignature.substring((methodSignature.indexOf("(") + 1),
+//                methodSignature.indexOf(")"));
+//        Pattern p = Pattern.compile(METHOD_SIGNATURE);
+//        Matcher m = p.matcher(methodSignature);
+//        if (m.matches()) {
+//            methodName = m.group(2).trim();
+//        }
+//        String[] paramArray = methodParamLine.trim().split(",");
+//        if (Pattern.compile(EMPTY_PATTERN).matcher(methodParamLine).matches()) {
+//            numOfParams = 0;
+//            return;
+//        }
+//        numOfParams = paramArray.length;
+//        paramNames = new String[numOfParams];
+//        paramTypes = new String[numOfParams];
+//    }
+         //sets the method components
+
+        private void extractMethodComponents() throws sJavaException {
+            String methodSignature = lines.getFirst().trim();
+            String methodParamLine = methodSignature.substring((methodSignature.indexOf("(") + 1),
+                    methodSignature.indexOf(")"));
+            Pattern p = Pattern.compile(METHOD_SIGNATURE);
+            Matcher m = p.matcher(methodSignature);
+            if(m.matches()) {
+                methodName = m.group(2).trim();
+            }
+            if (Pattern.compile(EMPTY_PATTERN).matcher(methodParamLine).matches()) {
+                return;
+            }
+            String[] paramArray = methodParamLine.trim().split(",");
+            int paramNum = paramArray.length;
+            paramNames = new String[paramNum];
+        paramTypes = new String[paramNum];
         for (int i = 0; i < paramArray.length; i++) {
             if(paramArray[i].equals("")){ throw new sJavaException("illegal param line");}
             paramArray[i] = paramArray[i].trim();

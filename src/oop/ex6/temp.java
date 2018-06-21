@@ -7,6 +7,14 @@ import java.util.regex.Pattern;
 
 public class temp {
     public static void main(String[] args) {
+
+        String s = "true || false && 1 || 7";
+
+        String[] a = s.split(("&&|\\|\\|"));
+        for(String i:a){
+            System.out.println(i);
+        }
+
 //
 //        try {
 //            LinkedList<String> s = new LinkedList<String>();
