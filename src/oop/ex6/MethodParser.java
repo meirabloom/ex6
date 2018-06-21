@@ -51,7 +51,7 @@ public class MethodParser {
         if(!methods.containsKey(name)){ throw new sJavaException("call to un-initialized method");}
         MethodBlock curMethod = methods.get(name);
         LinkedList<String> allParams = parseParameters(params);
-        if(allParams.size()!= curMethod.getParamTypes().length){
+        if(allParams.size()!= curMethod.getNumOfParams()){
             throw new sJavaException("wrong num of params");
         }
         validateCallParams(allParams, curMethod);
@@ -67,7 +67,10 @@ public class MethodParser {
      */
     private LinkedList<String> parseParameters(String parameterLine) throws sJavaException {
         LinkedList<String> params = new LinkedList<String>();
-        String[]  paramArray = parameterLine.split(",");
+        String[] paramArray = parameterLine.split(",");
+        if (paramArray.length == 1 && paramArray[0].equals("")){
+            return params;
+        }
         for (String singleParam : paramArray) {
             if (singleParam.contains(ASSIGNMENT)) {
                 throw new sJavaException(METHOD_PARAMETER_EXCEPTION_MSG);

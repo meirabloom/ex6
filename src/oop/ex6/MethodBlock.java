@@ -24,6 +24,7 @@ public class MethodBlock extends Block{
     private String methodName;
     private MethodParser methodParser;
     private HashMap<String, MethodBlock> methods;
+    private int numOfParams;
 
     /**
      * constructor
@@ -62,13 +63,14 @@ public class MethodBlock extends Block{
         if(m.matches()) {
             methodName = m.group(2).trim();
         }
+        String[] paramArray = methodParamLine.trim().split(",");
         if (Pattern.compile(EMPTY_PATTERN).matcher(methodParamLine).matches()) {
+            numOfParams=0;
             return;
         }
-        String[] paramArray = methodParamLine.trim().split(",");
-        int paramNum = paramArray.length;
-        paramNames = new String[paramNum];
-        paramTypes = new String[paramNum];
+        numOfParams = paramArray.length;
+        paramNames = new String[numOfParams];
+        paramTypes = new String[numOfParams];
         for (int i = 0; i < paramArray.length; i++) {
             if(paramArray[i].equals("")){ throw new sJavaException("illegal param line");}
             paramArray[i] = paramArray[i].trim();
@@ -135,7 +137,7 @@ public class MethodBlock extends Block{
     public String getMethodName(){return methodName;}
 
 
-
-
-
+    public int getNumOfParams() {
+        return numOfParams;
+    }
 }

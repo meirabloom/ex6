@@ -247,7 +247,6 @@ public class BlockParser {
         if (!methods.containsKey(name)) {
             throw new sJavaException("call to un-initialized method");
         }
-        MethodBlock curMethod = methods.get(name);
         curr.checkParamsInCall(methodCallLine);
     }
 

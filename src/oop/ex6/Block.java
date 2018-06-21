@@ -66,6 +66,7 @@ public abstract class Block {
                     String[] allParams = param.trim().split(",");
                     if (!(allParams.length == 1 && allParams[0].equals(""))) {
                         for (String string : allParams) {
+                           string = string.trim();
                             String type = string.substring(0, string.indexOf(' '));
                             switch (type) {
                                 case "int":
@@ -77,10 +78,10 @@ public abstract class Block {
                                     string += "= \"\";";
                                     break;
                                 case "char":
-                                    string += "= \'\';";
+                                    string += "= \'a\';";
                                     break;
-                                    default:
-                                        throw new sJavaException("wrong parameter type");
+                                default:
+                                    throw new sJavaException("wrong parameter type");
                             }
                             variables.add(string);
                         }
