@@ -1,5 +1,9 @@
 package oop.ex6;
 
+import oop.ex6.Block;
+import oop.ex6.MethodBlock;
+import oop.ex6.sJavaException;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.regex.Matcher;

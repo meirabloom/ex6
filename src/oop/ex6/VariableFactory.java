@@ -1,5 +1,8 @@
 package oop.ex6;
 
+import oop.ex6.Block;
+import oop.ex6.Variable;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
@@ -8,7 +11,8 @@ import java.util.regex.Pattern;
 
 public class VariableFactory {
 
-    private static final String LEGAL_PATTERN = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)\\s*";
+    private static final String LEGAL_PATTERN = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)" +
+            "(;)\\s*";
     private static final String DOUBLE_PATTERN = "-?\\d+\\.?\\d*";
     private static final String INT_PATTERN = "-?\\d+";
     private static final String STR_PATTERN = "\"[a-zA-Z]*\"";
@@ -66,7 +70,6 @@ public class VariableFactory {
                         throw new sJavaException("illegal name");
                     }
                    // if (newMatcher.matches()) { // oneVar is assigned
-                        String value = newMatcher.group(VALUE_PLACE);
                         if (!checkValue(type, newMatcher.group(VALUE_PLACE).trim())) {
                             throw new sJavaException("incompatible value");
                         }

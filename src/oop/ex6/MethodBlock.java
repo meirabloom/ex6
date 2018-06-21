@@ -1,5 +1,7 @@
 package oop.ex6;
 
+import oop.ex6.MethodParser;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
@@ -55,6 +57,11 @@ public class MethodBlock extends Block{
         String methodSignature = lines.getFirst().trim();
         String methodParamLine = methodSignature.substring((methodSignature.indexOf("(") + 1),
                 methodSignature.indexOf(")"));
+        Pattern p = Pattern.compile(METHOD_SIGNATURE);
+        Matcher m = p.matcher(methodSignature);
+        if(m.matches()) {
+            methodName = m.group(2).trim();
+        }
         if (Pattern.compile(EMPTY_PATTERN).matcher(methodParamLine).matches()) {
             return;
         }
@@ -68,11 +75,6 @@ public class MethodBlock extends Block{
             String[] paramElements = getTypeAndName(paramArray[i]);//, paramNames);
             paramTypes[i] = paramElements[0].trim();
             paramNames[i] = paramElements[1].trim();
-        }
-        Pattern p = Pattern.compile(METHOD_SIGNATURE);
-        Matcher m = p.matcher(methodSignature);
-        if(m.matches()) {
-            methodName = m.group(2).trim();
         }
     }
 

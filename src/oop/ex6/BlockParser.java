@@ -1,9 +1,10 @@
 package oop.ex6;
 
+import oop.ex6.MethodBlock;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.SplittableRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +45,7 @@ public class BlockParser {
 
     Block global;
 
-    BlockParser(Block global){
+    public BlockParser(Block global){
         this.global = global;
         blocksToRead = new LinkedList<Block>();
        // blocksToRead.add(global);
@@ -106,7 +107,7 @@ public class BlockParser {
                 break;
 
             case METHOD_CALL_LINE:
-                if(block.getName().equals("global")){
+                if(blockCounter == 0 && block.getName().equals("global")){
                     throw new sJavaException("Method call in global scope");
                 }
                 if(blockCounter==0){
@@ -176,7 +177,7 @@ public class BlockParser {
             return VARIABLE_ASSIGNMENT_LINE;
         }
         if(Pattern.compile(METHOD_CALL).matcher(line).matches()){
-            return METHOD_CALL;
+            return METHOD_CALL_LINE;
         }
         if(Pattern.compile(RETURN).matcher(line).matches()){
             return RETURN_LINE;
