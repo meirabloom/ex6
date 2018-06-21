@@ -58,10 +58,12 @@ public class MethodParser {
     }
 
     /**
-     *
+     * Receives string of all the potential parameters in a method call, and separates them to individual
+     * parameters. Checks the structure of the individual parameters is legal: they do not contain an
+     * assignment in them (can't have foo(b = 5).
      * @param parameterLine - line of params
-     * @return - the method parameters
-     * @throws sJavaException
+     * @return - the method parameters - linkedlist of all the params
+     * @throws sJavaException - if there is an assignment
      */
     private LinkedList<String> parseParameters(String parameterLine) throws sJavaException {
         LinkedList<String> params = new LinkedList<String>();
@@ -77,7 +79,7 @@ public class MethodParser {
 
 
     /**
-     * validates the parameters of the mathod call are legal: that they are all initialized veriables in the
+     * validates the parameters of the method call are legal: that they are all initialized veriables in the
      * correct scope, that their type match the methods parameter types.
      * @param params - parameters to check
      * @param method -
