@@ -95,17 +95,6 @@ public class MethodParser {
 
         for(int i=0; i< params.size(); i++){
             factory.checkValue(types[i],params.get(i));
-//            Variable curVar = block.searchForVar(params.get(i));
-//            if(curVar==null){
-//                throw new sJavaException("param not found");
-//            }else{
-//                if(!curVar.assigned){
-//                    throw new sJavaException("param not assigned");
-//                }
-//                if (!curVar.varType.equals(types[i])){
-//                    throw new sJavaException("wrong param type");
-//                }
-//            }
         }
     }
 
