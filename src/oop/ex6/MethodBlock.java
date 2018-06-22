@@ -38,7 +38,7 @@ public class MethodBlock extends Block{
             throws sJavaException {
         super(parent, lines,  methods,METHOD_BRACKET_FACTOR);
         extractMethodComponents();
-        methodParser = new MethodParser(lines,this);
+        methodParser = new MethodParser(lines,this, this.factory);
         methodParser.checkMethod();
         this.methods = methods;
         String header = super.lines.getFirst();

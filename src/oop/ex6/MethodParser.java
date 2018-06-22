@@ -10,6 +10,7 @@ public class MethodParser {
     private LinkedList<String> methodLines;
     private Block block;
     private Matcher m;
+    private VariableFactory factory;
 
 
     private static final String MISSING_RETURN_EXCEPTION = "missing proper return statement";
@@ -21,9 +22,10 @@ public class MethodParser {
     private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
 
 
-    MethodParser(LinkedList<String> methodLines, Block block){
+    MethodParser(LinkedList<String> methodLines, Block block, VariableFactory factory){
        this.methodLines = methodLines;
        this.block = block;
+       this.factory = factory;
     }
 
     public void checkMethod() throws sJavaException {
@@ -90,18 +92,20 @@ public class MethodParser {
      */
     private void validateCallParams(LinkedList<String> params, MethodBlock method) throws sJavaException {
         String[] types = method.getParamTypes();
+
         for(int i=0; i< params.size(); i++){
-            Variable curVar = block.searchForVar(params.get(i));
-            if(curVar==null){
-                throw new sJavaException("param not found");
-            }else{
-                if(!curVar.assigned){
-                    throw new sJavaException("param not assigned");
-                }
-                if (!curVar.varType.equals(types[i])){
-                    throw new sJavaException("wrong param type");
-                }
-            }
+            factory.checkValue(types[i],params.get(i));
+//            Variable curVar = block.searchForVar(params.get(i));
+//            if(curVar==null){
+//                throw new sJavaException("param not found");
+//            }else{
+//                if(!curVar.assigned){
+//                    throw new sJavaException("param not assigned");
+//                }
+//                if (!curVar.varType.equals(types[i])){
+//                    throw new sJavaException("wrong param type");
+//                }
+//            }
         }
     }
 
