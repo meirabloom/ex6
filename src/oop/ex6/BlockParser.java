@@ -63,6 +63,7 @@ public class BlockParser {
             String type = parseLine(line);
             readLine(type, line, block);
         }
+        if(blockCounter!=0) {throw new sJavaException("wrong number of brackets");}
         for (Block newBlock : blocksToRead) {
             blocksToRead.remove();
             innerBlockLines = new LinkedList<String>();
