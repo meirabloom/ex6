@@ -111,6 +111,7 @@ public abstract class Block {
                     String assignmentVar = variables[1].substring(0, variables[1].indexOf(";")).trim();
                     Variable var1 = this.searchForVar(firstVar);
                     if(var1 == null) { return;}
+                    if(var1.isFinal) { throw new sJavaException("changing final variable");}
                     if(!factory.checkValue(var1.varType,assignmentVar)){
                         throw new sJavaException("wrong type assigned to variable");}
                 }
