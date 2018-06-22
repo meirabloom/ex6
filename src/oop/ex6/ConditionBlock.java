@@ -23,7 +23,7 @@ public class ConditionBlock extends Block {
     private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
     private static final String AND_OR = "(&&)|(\\|\\|)";
     private static final String REQUIRED_CONDITION = "\\s*(true|false)\\s*|(\\s*\\d+\\.?\\d*\\s*)|" +
-            "([^\\d\\s]\\S*)";
+            "(\\s*[^\\d\\s]\\S*\\s*)";
     private static final String SPECIFIC_CONDITION = "-?\\d+(\\.\\d+)?";
 
     ConditionBlock(Block parent, LinkedList<String> lines,
@@ -49,28 +49,28 @@ public class ConditionBlock extends Block {
                 conditionSignature.indexOf(")"));
         multipleConditions = conditionLine.trim().split(AND_OR);
         for (String condition : multipleConditions) {
-            Matcher m = Pattern.compile(REQUIRED_CONDITION).matcher(condition);
-
-            condition = condition.trim();
-            Pattern p = Pattern.compile(SPECIFIC_CONDITION);
-            m = p.matcher(condition);
-
-            if (!condition.equals(TRUE) && !condition.equals(FALSE) && !m.matches()) {
-
-                Variable variable = searchForVar(condition);
-
-                if (variable != null && variable.assigned) {
-                    String varType = variable.varType;
-                    if (!varType.equals(INT) && !varType.equals(DOUBLE) && !varType.equals(BOOLEAN)) {
-                        throw new sJavaException("illegal condition variable assignment");
-                    }
-                } else {
-                    throw new sJavaException("condition variable not assigned");
+                Matcher m = Pattern.compile(REQUIRED_CONDITION).matcher(condition);
+                if (!m.matches()) {
+                    throw new sJavaException("Illegal condition");
                 }
-            }
-            else if (!m.matches()) {
-                throw new sJavaException("Illegal condition");
-            }
+                condition = condition.trim();
+                Pattern p = Pattern.compile(SPECIFIC_CONDITION);
+                Matcher l = p.matcher(condition);
+
+                if (!condition.equals(TRUE) && !condition.equals(FALSE) && !l.matches()) {
+
+                    Variable variable = searchForVar(condition);
+
+                    if (variable != null && variable.assigned) {
+                        String varType = variable.varType;
+                        if (!varType.equals(INT) && !varType.equals(DOUBLE) && !varType.equals(BOOLEAN)) {
+                            throw new sJavaException("illegal condition variable assignment");
+                        }
+                    } else {
+                        throw new sJavaException("condition variable not assigned");
+                    }
+                }
+
         } //TODO -- what if the condition was empty?
         verifyEnd();
     }
