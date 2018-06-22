@@ -25,7 +25,6 @@ public class MethodBlock extends Block{
     private String methodName;
     private MethodParser methodParser;
     private HashMap<String, MethodBlock> methods;
-    private int numOfParams;
 
     /**
      * constructor
@@ -158,6 +157,6 @@ public class MethodBlock extends Block{
 
 
     public int getNumOfParams() {
-        return numOfParams;
+        return paramNames.length;
     }
 }
