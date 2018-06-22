@@ -90,7 +90,6 @@ public class VariableFactory {
                     }
                 }
             }
-
         return variables;
     }
 
@@ -109,7 +108,7 @@ public class VariableFactory {
      */
     private boolean checkName(String name) throws sJavaException {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
-        if (namePattern.matcher(name).matches() && !name.equals("_") && !variables.containsKey(name)) {
+        if (namePattern.matcher(name).matches()  && !variables.containsKey(name)) {
             String[] paramNames = block.getParamNames();
             if(paramNames==null){
                 return true;

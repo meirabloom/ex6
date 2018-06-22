@@ -11,7 +11,7 @@ public abstract class Block {
     private static final String VARIABLE_INIT =
             "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)(;)\\s*";
     private static final String VARIABLE_ASSIGNMENT = "(\\w+)\\s*(=)\\s*(.*);\\s*";
-    private static final String METHOD_INIT = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
+    private static final String METHOD_INIT = "\\s*(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
 
     Block parent;
     HashMap<String, Variable> localVariables;
@@ -48,17 +48,6 @@ public abstract class Block {
         int bracketCounter = 0;
         LinkedList<String> variables = new LinkedList<String>();
         for (String line : lines) {
-            if (line.contains("{")) {
-                bracketCounter++;
-            }
-            if (line.contains("}")) {
-                bracketCounter--;
-            }
-            if (Pattern.compile(VARIABLE_INIT).matcher(line).matches()) {
-                if (bracketCounter == factor) {
-                    variables.add(line);
-                }
-            }
             if (Pattern.matches(METHOD_INIT,line) && bracketCounter == factor) {
                 Matcher m = Pattern.compile(METHOD_INIT).matcher(line);
                 if (m.matches()){
@@ -66,7 +55,7 @@ public abstract class Block {
                     String[] allParams = param.trim().split(",");
                     if (!(allParams.length == 1 && allParams[0].equals(""))) {
                         for (String string : allParams) {
-                           string = string.trim();
+                            string = string.trim();
                             String type = string.substring(0, string.indexOf(' '));
                             switch (type) {
                                 case "int":
@@ -90,6 +79,18 @@ public abstract class Block {
                 }
 
             }
+            if (line.contains("{")) {
+                bracketCounter++;
+            }
+            if (line.contains("}")) {
+                bracketCounter--;
+            }
+            if (Pattern.compile(VARIABLE_INIT).matcher(line).matches()) {
+                if (bracketCounter == factor) {
+                    variables.add(line);
+                }
+            }
+
         }
         return variables;
     }
