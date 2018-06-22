@@ -48,6 +48,17 @@ public abstract class Block {
         int bracketCounter = 0;
         LinkedList<String> variables = new LinkedList<String>();
         for (String line : lines) {
+            if (line.contains("{")) {
+                bracketCounter++;
+            }
+            if (line.contains("}")) {
+                bracketCounter--;
+            }
+            if (Pattern.compile(VARIABLE_INIT).matcher(line).matches()) {
+                if (bracketCounter == factor) {
+                    variables.add(line);
+                }
+            }
             if (Pattern.matches(METHOD_INIT,line) && bracketCounter == factor) {
                 Matcher m = Pattern.compile(METHOD_INIT).matcher(line);
                 if (m.matches()){
@@ -78,17 +89,6 @@ public abstract class Block {
 
                 }
 
-            }
-            if (line.contains("{")) {
-                bracketCounter++;
-            }
-            if (line.contains("}")) {
-                bracketCounter--;
-            }
-            if (Pattern.compile(VARIABLE_INIT).matcher(line).matches()) {
-                if (bracketCounter == factor) {
-                    variables.add(line);
-                }
             }
 
         }

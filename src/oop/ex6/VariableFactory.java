@@ -78,18 +78,20 @@ public class VariableFactory {
                         variables.put(name, newVar);
                    // }
                 }else { // oneVar is not assigned
-
                     if (isFinal) {
-                            throw new sJavaException("Uninitialized final val");
-                        }
-                        if(!Pattern.compile(NAME_PATTERN).matcher(oneVar.trim()).matches()){
-                            throw new sJavaException("illegal variables line");
-                        }
-                        Variable newVar = new Variable(type, oneVar.trim(), UNASSIGNED, isFinal, null);
-                        variables.put(oneVar.trim(), newVar);
+                        throw new sJavaException("Uninitialized final val");
                     }
+                    if (!Pattern.compile(NAME_PATTERN).matcher(oneVar.trim()).matches()) {
+                        throw new sJavaException("illegal variables line");
+                    }
+                    if (!checkName(oneVar.trim())) {
+                        throw new sJavaException("illegal variable name");
+                    }
+                    Variable newVar = new Variable(type, oneVar.trim(), UNASSIGNED, isFinal, null);
+                    variables.put(oneVar.trim(), newVar);
                 }
             }
+        }
         return variables;
     }
 
@@ -109,19 +111,19 @@ public class VariableFactory {
     private boolean checkName(String name) throws sJavaException {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
         if (namePattern.matcher(name).matches()  && !variables.containsKey(name)) {
-            String[] paramNames = block.getParamNames();
-            if(paramNames==null){
-                return true;
-            }
-            boolean exists = false;
-            for(String param: paramNames) {
-                if (param.equals(name)) {
-                    exists = true;
-                }
-                if (exists) {
-                    throw new sJavaException("Variable has same name as method param");
-                }
-            }
+//            String[] paramNames = block.getParamNames();
+//            if(paramNames==null){
+//                return true;
+//            }
+//            boolean exists = false;
+//            for(String param: paramNames) {
+//                if (param.equals(name)) {
+//                    exists = true;
+//                }
+//                if (exists) {
+//                    throw new sJavaException("Variable has same name as method param");
+//                }
+//            }
             return true;
         }
         return false;
