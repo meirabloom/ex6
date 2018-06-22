@@ -158,6 +158,10 @@ public class MethodBlock extends Block{
 
 
     public int getNumOfParams() {
-        return paramNames.length;
+        if (paramNames == null) {
+            return 0;
+        } else {
+            return paramNames.length;
+        }
     }
 }

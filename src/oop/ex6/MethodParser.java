@@ -92,7 +92,6 @@ public class MethodParser {
      */
     private void validateCallParams(LinkedList<String> params, MethodBlock method) throws sJavaException {
         String[] types = method.getParamTypes();
-
         for(int i=0; i< params.size(); i++){
             factory.checkValue(types[i],params.get(i));
         }

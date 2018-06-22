@@ -20,7 +20,7 @@ public class ConditionBlock extends Block {
     private static final int CONDITION_BRACKET_FACTOR = 1;
 
     //regex
-    //private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
+    private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
     private static final String AND_OR = "(&&)|(\\|\\|)";
     private static final String REQUIRED_CONDITION = "\\s*(true|false)\\s*|(\\s*\\d+\\.?\\d*\\s*)|" +
             "(\\s*[^\\d\\s]\\S*\\s*)";
