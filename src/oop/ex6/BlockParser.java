@@ -34,14 +34,14 @@ public class BlockParser {
     private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
 
     // Regexs
-    private static final String METHOD_INIT = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
+    private static final String METHOD_INIT = "\\s*(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
     private static final String METHOD_CALL = "\\s*([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
-    private static final String VARIABLE_INIT = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s*(.*)(;)\\s*";
-    private static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;\\s*";
+    private static final String VARIABLE_INIT =
+            "\\s*(final\\s+)?\\s*(int|double|String|boolean|char)\\s*(.*)(;)\\s*";
+    private static final String VARIABLE_ASSIGNMENT = "\\s*([a-zA-z]\\w*)\\s*=(.+)\\w*;\\s*";
     private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
     private static final String RETURN = "\\s*return;\\s*";
     private static final String BLOCK_END = "\\s*}\\s*";
-    private static final String NEW_VAL_PATTERN = "(\\d+\\.?\\d*)|(\"[a-zA-Z]+\")";
 
     Block global; MethodBlock curr;
 
