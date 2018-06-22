@@ -35,7 +35,7 @@ public class BlockParser {
 
     // Regexs
     private static final String METHOD_INIT = "(void)\\s+([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
-    private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
+    private static final String METHOD_CALL = "\\s*([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     private static final String VARIABLE_INIT = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s*(.*)(;)\\s*";
     private static final String VARIABLE_ASSIGNMENT = "([a-zA-z]\\w*)\\s*=(.+)\\w*;\\s*";
     private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";

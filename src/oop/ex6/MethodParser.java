@@ -15,7 +15,7 @@ public class MethodParser {
     private static final String MISSING_RETURN_EXCEPTION = "missing proper return statement";
     private static final String MISSING_BRACKET = "Missing }";
     private static final String RETURN_SIGNATURE = "\\s*return;\\s*";
-    private static final String METHOD_CALL = "([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
+    private static final String METHOD_CALL = "\\s*([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     private static final String ASSIGNMENT = "=";
     private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
     private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
