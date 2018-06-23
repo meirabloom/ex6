@@ -31,7 +31,7 @@ public class InitialParser {
      * @param file - the file to parse
      * @throws IOException - if the file is not readable
      */
-    private void addLines(File file) throws IOException { //TODO - specify the exception+message
+    private void addLines(File file) throws IOException {
         try {
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -45,7 +45,7 @@ public class InitialParser {
             bufferedReader.close();
         }
         catch (IOException e) {
-            throw new IOException(); //TODO specify a message
+            throw new IOException();
         }
     }
 

@@ -9,9 +9,6 @@ import java.util.LinkedList;
  */
 public class GlobalBlock extends Block {
 
-    //LinkedList<String> lines =new LinkedList<String>();
-   // HashMap<String, Variable> localVariables;
-
     /**
      * constructor
      * @param lines - the string lines that make up the block

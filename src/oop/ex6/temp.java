@@ -15,6 +15,8 @@ public class temp {
             System.out.println(i);
         }
 
+       // LinkedList<Integer>[] l = new LinkedList<Integer>[6];
+
 //
 //        try {
 //            LinkedList<String> s = new LinkedList<String>();

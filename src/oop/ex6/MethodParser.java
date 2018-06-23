@@ -12,26 +12,47 @@ public class MethodParser {
     private Matcher m;
     private VariableFactory factory;
 
-
+    //* constants *//
     private static final String MISSING_RETURN_EXCEPTION = "missing proper return statement";
     private static final String MISSING_BRACKET = "Missing }";
-    private static final String RETURN_SIGNATURE = "\\s*return;\\s*";
-    private static final String METHOD_CALL = "\\s*([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     private static final String ASSIGNMENT = "=";
     private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
+    private static final int SIZE_FACTOR = 2;
+    private static final int NAME_PLACE = 1;
+    private static final int PARAMS_PLACE = 2;
+
+    //* Regex *//
+    private static final String RETURN_SIGNATURE = "\\s*return;\\s*";
+    private static final String METHOD_CALL = "\\s*([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
     private static final String END_METHOD_SIGNATURE = "\\s*}\\s*";
 
 
+    /**
+     * Constructor for methodParser
+     * @param methodLines - list of lines making the method
+     * @param block - current block
+     * @param factory - variable factory
+     */
     MethodParser(LinkedList<String> methodLines, Block block, VariableFactory factory){
        this.methodLines = methodLines;
        this.block = block;
        this.factory = factory;
     }
 
+    /**
+     * checks if the method ends with a return statement and curly brackets
+     * @throws sJavaException - an exception thrown if the method ends illegally
+     */
     public void checkMethod() throws sJavaException {
-        checkMethodEnding(methodLines.getLast(),methodLines.get(methodLines.size()-2));
+        String endStatement = methodLines.getLast();
+        String returnStatement = methodLines.get(methodLines.size()-SIZE_FACTOR);
+        if(!Pattern.compile(RETURN_SIGNATURE).matcher(returnStatement).matches()){
+            throw new sJavaException(MISSING_RETURN_EXCEPTION);
+        }
+        if (!Pattern.compile(END_METHOD_SIGNATURE).matcher(endStatement).matches()) {
+            throw new sJavaException(MISSING_BRACKET);
+        }
     }
-
 
     /**
      * Checks if method call is ok: checks if the structure of the call follows expected structure, checks
@@ -47,8 +68,8 @@ public class MethodParser {
         String name;
         String params;
         if(m.matches()){
-            name = m.group(1);
-            params = m.group(2);
+            name = m.group(NAME_PLACE);
+            params = m.group(PARAMS_PLACE);
         }else{ throw new sJavaException("illegal method call"); }
         if(!methods.containsKey(name)){ throw new sJavaException("call to un-initialized method");}
         MethodBlock curMethod = methods.get(name);
@@ -96,23 +117,6 @@ public class MethodParser {
             factory.checkValue(types[i],params.get(i));
         }
     }
-
-    /**
-     * checks if the method ends with a return statement and curly brackets
-     * @throws sJavaException - an exception thrown if the method ends illegally
-     */
-    private void checkMethodEnding(String endStatement, String returnStatement ) throws sJavaException {
-        if(!Pattern.compile(RETURN_SIGNATURE).matcher(returnStatement).matches()){
-               throw new sJavaException(MISSING_RETURN_EXCEPTION);
-        }
-        if (!Pattern.compile(END_METHOD_SIGNATURE).matcher(endStatement).matches()) {
-            throw new sJavaException(MISSING_BRACKET);
-        }
-    }
-
-
-
-
 
 
 }

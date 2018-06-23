@@ -5,6 +5,7 @@ import oop.ex6.MethodBlock;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.SplittableRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,12 +31,9 @@ public class BlockParser {
     private static final String METHOD_INIT_LINE = "methodInit";
     private static final String IF_WHILE_BLOCK_LINE = "ifWhileBlock";
 
-    private static final String ASSIGNMENT = "=";
-    private static final String METHOD_PARAMETER_EXCEPTION_MSG = "Illegal method parameter";
-
-    // Regexs
+    //* Regex *//
     private static final String METHOD_INIT = "\\s*(void)\\s+([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
-    private static final String METHOD_CALL = "\\s*([a-zA-z]\\w*)\\s*\\((.*)\\)\\s*;";
+    private static final String METHOD_CALL = "\\s*([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*;";
     private static final String VARIABLE_INIT =
             "\\s*(final\\s+)?\\s*(int|double|String|boolean|char)\\s*(.*)(;)\\s*";
     private static final String VARIABLE_ASSIGNMENT = "\\s*([a-zA-Z]\\w*)\\s*=(.+)\\w*;\\s*";
@@ -43,18 +41,22 @@ public class BlockParser {
     private static final String RETURN = "\\s*return;\\s*";
     private static final String BLOCK_END = "\\s*}\\s*";
 
-    Block global; MethodBlock curr;
+    Block global;
+    MethodBlock curr;
 
+    /**
+     * Constructor for blockparser
+     * @param global global block
+     */
     public BlockParser(Block global){
         this.global = global;
         blocksToRead = new LinkedList<Block>();
-       // blocksToRead.add(global);
     }
 
     /**
-     *
-     * @param lines
-     * @param block
+     * read all the blocks in the file, each read creting all the sub-blocks abd reading them as well.
+     * @param lines - lines of the block
+     * @param block - current block
      * @throws sJavaException
      */
     public void readBlock(LinkedList<String> lines, Block block, MethodBlock method) throws sJavaException {
@@ -67,8 +69,8 @@ public class BlockParser {
         for (Block newBlock : blocksToRead) {
             blocksToRead.remove();
             innerBlockLines = new LinkedList<String>();
-            MethodBlock a = block.getName().equals("global") ?(MethodBlock) newBlock : method;
-            readBlock(newBlock.lines, newBlock, a);
+            MethodBlock methodBlock = block.getName().equals("global") ?(MethodBlock) newBlock : method;
+            readBlock(newBlock.lines, newBlock, methodBlock);
         }
      }
 
@@ -84,9 +86,7 @@ public class BlockParser {
             throws sJavaException {
         switch (type){
             case VARIABLE_INIT_LINE:
-                if(blockCounter>0){
-                    innerBlockLines.add(line);
-                }
+                if(blockCounter>0){ innerBlockLines.add(line); }
                 break;
 
             case METHOD_INIT_LINE:
@@ -112,26 +112,17 @@ public class BlockParser {
                 if(blockCounter == 0 && block.getName().equals("global")){
                     throw new sJavaException("Method call in global scope");
                 }
-                if(blockCounter==0){
-                   checkMethodCall(line, methods);
-                }else{
-                    innerBlockLines.add(line);
-                }
+                if(blockCounter==0) {checkMethodCall(line, methods);
+                }else { innerBlockLines.add(line); }
                 break;
             case VARIABLE_ASSIGNMENT_LINE:
-                if(blockCounter==0){
-                    //checkVarAssignment(line,block);
-                }else{
-                    innerBlockLines.add(line);
-                }
+                if(blockCounter!=0) { innerBlockLines.add(line);}
                 break;
 
             case RETURN_LINE:
                 if(blockCounter==0 && (block.getName().equals("global"))){
                     throw new sJavaException("return in global scope");
-                }if(blockCounter > 0) {
-                    innerBlockLines.add(line);
-                }
+                }if(blockCounter > 0) { innerBlockLines.add(line); }
                 break;
 
             case BLOCK_END_LINE:
@@ -196,35 +187,6 @@ public class BlockParser {
 
     }
 
-
-//    /**
-//     * Checks variable assignment is legal
-//     * @param line - assignment line
-//     * @param block - current block
-//     * @throws sJavaException - if assignment is illegal: if variables not found, if Variable not assigned
-//     * or if there are incompatible types.
-//     */
-//    void checkVarAssignment(String line, Block block) throws sJavaException {
-//        String[] variables = line.split("=");
-//        for (String var : variables) {
-//            var.trim();
-//        }
-//        Variable var1 = block.searchForVar(variables[0]);
-//    }
-////        if(Pattern.compile(NEW_VAL_PATTERN).matcher(variables[1]).matches()) {
-////
-////        }else{
-////            Variable var2 = block.searchForVar(variables[1]);
-////            if (var1 == null || var2 == null) {
-////                throw new sJavaException("variables not found");
-////            }
-////            if (!var2.assigned) {
-////                throw new sJavaException("Variable not assigned");
-////            }
-////            if (!var2.checkTypeAssignment(var1.varType)) {
-////                throw new sJavaException("incompatible types");
-////            }
-////        }
 
     /**
      * Checks if method call is ok: checks if the structure of the call follows expected structure, checks

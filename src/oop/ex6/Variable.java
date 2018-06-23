@@ -8,6 +8,14 @@ public class Variable {
     boolean isGlobal;
     String value;
 
+    /**
+     * Constructor for variable
+     * @param type - variable type
+     * @param name - variable name
+     * @param assigned - true iif variable is assigned
+     * @param isFinal - true iff variable is final
+     * @param value - value of the variable if it is assigned, null if it isn't.
+     */
     Variable(String type, String name, boolean assigned, boolean isFinal, String value){
         this.varType = type;
         this.name = name;

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class ConditionBlock extends Block {
 
-    //possible conditions
+    //* constants *//
     private static final String INT = "int";
     private static final String BOOLEAN = "boolean";
     private static final String DOUBLE = "double";
@@ -19,13 +19,19 @@ public class ConditionBlock extends Block {
     private static final String FALSE = "false";
     private static final int CONDITION_BRACKET_FACTOR = 1;
 
-    //regex
-    private static final String CONDITION_SIGNATURE = "^\\s*(while|if)\\s*\\((.+)\\)\\s*\\{\\s*";
+    //* regex *//
     private static final String AND_OR = "(&&)|(\\|\\|)";
     private static final String REQUIRED_CONDITION = "\\s*(true|false)\\s*|(\\s*\\d+\\.?\\d*\\s*)|" +
             "(\\s*[^\\d\\s]\\S*\\s*)";
     private static final String SPECIFIC_CONDITION = "-?\\d+(\\.\\d+)?";
 
+    /**
+     * Constructor for condition block
+     * @param parent parent block
+     * @param lines block lines
+     * @param methods block methods
+     * @throws sJavaException
+     */
     ConditionBlock(Block parent, LinkedList<String> lines,
                    HashMap<String, MethodBlock> methods) throws sJavaException {
         super(parent, lines,  methods,CONDITION_BRACKET_FACTOR);
@@ -41,6 +47,10 @@ public class ConditionBlock extends Block {
         return "condition";
     }
 
+    /**
+     * verify the condition in the condition block is legal
+     * @throws sJavaException if the condition if not legal
+     */
     private void verifyCondition() throws sJavaException {
         String[] multipleConditions;
         String conditionLine;
@@ -70,8 +80,7 @@ public class ConditionBlock extends Block {
                         throw new sJavaException("condition variable not assigned");
                     }
                 }
-
-        } //TODO -- what if the condition was empty?
+        }
         verifyEnd();
     }
 
@@ -79,7 +88,7 @@ public class ConditionBlock extends Block {
      * verifies end of if while block
      * @throws sJavaException
      */
-    void verifyEnd() throws sJavaException {
+    private void verifyEnd() throws sJavaException {
         if (!lines.getLast().trim().equals("}")) {
             throw new sJavaException("condition block doesn't end in }");
         }

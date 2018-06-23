@@ -34,9 +34,9 @@ public class VariableFactory {
     private Matcher m;
 
     /**
-     * Constructor
-     * @param strVars
-     * @param block
+     * Constructor for variable factory
+     * @param strVars - list of string to turn into variables
+     * @param block - current block which contains the variables
      */
     VariableFactory (LinkedList<String> strVars, Block block){
         this.strVars = strVars;
@@ -46,9 +46,9 @@ public class VariableFactory {
 
 
     /**
-     *
-     * @return
-     * @throws sJavaException
+     * Returns a map of all variables, if they are legal.
+     * @return hashmap of variables with var name as key and variable object as value.
+     * @throws sJavaException if variables are not legal.
      */
     public HashMap<String, Variable> getVariables() throws sJavaException {
         for (String var : strVars) {
@@ -63,20 +63,18 @@ public class VariableFactory {
             for (String oneVar : allVarsInLine) {
                 Pattern assignedPattern = Pattern.compile(ASSIGNED_PATTERN);
                 Matcher newMatcher  = assignedPattern.matcher(oneVar);
-                if (newMatcher.matches()) {
+                if (newMatcher.matches()) { // oneVar is assigned
                     String name = newMatcher.group(NAME_PLACE).trim();
-
                     if (!checkName(name)) {
                         throw new sJavaException("illegal name");
                     }
-                   // if (newMatcher.matches()) { // oneVar is assigned
-                        if (!checkValue(type, newMatcher.group(VALUE_PLACE).trim())) {
-                            throw new sJavaException("incompatible value");
-                        }
-                        Variable newVar = new Variable(type, name, ASSIGNED, isFinal,
-                                newMatcher.group(VALUE_PLACE));
-                        variables.put(name, newVar);
-                   // }
+                    if (!checkValue(type, newMatcher.group(VALUE_PLACE).trim())) {
+                        throw new sJavaException("incompatible value");
+                    }
+                    Variable newVar = new Variable(type, name, ASSIGNED, isFinal,
+                            newMatcher.group(VALUE_PLACE));
+                    variables.put(name, newVar);
+
                 }else { // oneVar is not assigned
                     if (isFinal) {
                         throw new sJavaException("Uninitialized final val");
@@ -104,29 +102,13 @@ public class VariableFactory {
 
 
     /**
-     *
-     * @param
-     * @return
+     * Checks variables name - if it exists nd if it is the right format
+     * @param name - variable name
+     * @return true if name is legal, false otherwise.
      */
-    private boolean checkName(String name) throws sJavaException {
+    private boolean checkName(String name) {
         Pattern namePattern = Pattern.compile(NAME_PATTERN);
-        if (namePattern.matcher(name).matches()  && !variables.containsKey(name)) {
-//            String[] paramNames = block.getParamNames();
-//            if(paramNames==null){
-//                return true;
-//            }
-//            boolean exists = false;
-//            for(String param: paramNames) {
-//                if (param.equals(name)) {
-//                    exists = true;
-//                }
-//                if (exists) {
-//                    throw new sJavaException("Variable has same name as method param");
-//                }
-//            }
-            return true;
-        }
-        return false;
+        return namePattern.matcher(name).matches() && !variables.containsKey(name);
     }
 
     /**
@@ -144,7 +126,6 @@ public class VariableFactory {
         Pattern assignToNewValPattern = Pattern.compile(NEW_VAL_PATTERN);
 
         if(!assignToNewValPattern.matcher(value).matches()){ // assignment to existing variable
-            //TODO check method var against method parameters
             if(variables.containsKey(value)){ // assignment to variable in the same scope
                 if(!variables.get(value).assigned) {
                     throw new sJavaException("assignment to uninitialized variable");
@@ -179,6 +160,14 @@ public class VariableFactory {
     }
 
 
+    /**
+     * recives types of 2 variables and returns if the types are compatible or not.
+     * @param firstVarType - type of first variable (right hand to the "=", fir example if we are checking
+     * the assignment a=b, first var is a).
+     * @param otherVarType - type of the second variable.
+     * @return true iff the types are compatible
+     * @throws sJavaException if an unrecognized type is received.
+     */
     private boolean checkTypeAssignment(String firstVarType, String otherVarType) throws sJavaException {
         switch (firstVarType){
             case("int"):
