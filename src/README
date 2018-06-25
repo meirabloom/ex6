@@ -1,0 +1,72 @@
+abigail.sasporte
+meira.bloom
+
+=============================
+=      File description     =
+=============================
+Sjavac.java - The main class that runs the verifier
+InitialParser.java - Receives a file and reads it line by line, adding each line to a linked list of strings,
+                     excluding comment lines and empty lines.
+BlockParser.java - A class that iterates over the linked list of code string lines and parses them into
+                   block objects according to their type
+GlobalBlock.java - A class following the singleton principle, that represents the main block in the code to be
+                   verified. It's variables are global variables.
+Block.java - An abstract class representing a a block of code- the first line in the block contains an opening
+             curly bracket, the last line is simply a closing curly bracket, and everything in the block is
+             the scope.
+VariableFactory.java - A class that receives a list of strings, each line representing a variable, and creates
+                       Variable objects occording to the strings specifications.
+Variable.java - A class representing the variable objects. Each variable has a name, the option of being
+                assigned a value and knows whether or not a value has been assigned , its type, and whether or
+                not it is final or global.
+MethodParser.java - A class that receives a linked list of strings representing the Method block, ensures the
+                    methods validity and extracts its variables. if it is a call to the method, ensures the
+                    call is legal.
+MethodBlock.java - A class representing the method block
+ConditionBlock.java - A class representing the condition block objects. (if and while loops)
+sJavaException.java - receives a string specifying the reason for the error, and throws an exception with the
+                      explanation message
+
+
+=============================================
+=     Design and Implementation details     =
+=============================================
+The Sjavac class runs the program. It has a main method that implements try-catch: if the file containing the
+code to be verified is corrupt/ the program receives a bad path, an IO exception is thrown, and "2" is
+printed. if the file contains illegal code, an sJavaException is thrown with a message specifying the reason,
+and "1" is printed. If the verifier finishes it's run uninterrupted, the code contained in the file is
+pronounced legal by "0" being printed.
+the verifying process:
+The code is sent to the Initial parser class, which reads the code and adds each line that isn't empty/ not a
+comment line, into a linked list of strings. A singleton global block object is created with the list of
+lines, and the Block parser class is instantiated with the global block. the block parser iterates over the
+global block line and and parses them into objects according to their type. its main method is the readBlock
+method. At first it parses the block into sections, each block beginning and ending with curly brackets. each
+block is added into a queue to be read later. Then each block is read, recu
+
+
+
+
+
+=============================
+=    Answers to questions   =
+=============================
+1) Handling s-Java code errors-
+
+we implemented a class for such erros, called sJavaException. The class receives an argument specifying the
+error, and throws an exception with the message explanation
+
+2) How would you modify your code to add new types of variables (e.g float)?
+
+3) For the following two features your program does not currently support, describe which
+modifications/extensions you would have had to make in your code in order to support them. briefly describe
+what classes you would add, which methods you would add to existing classes, and which classes you would
+modify
+
+4) Describe two of the main regular expressions you used in your code
+
+
+
+
+
+

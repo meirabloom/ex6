@@ -8,7 +8,10 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * a class that receives a list of strings, each line representing a variable, and creates Variable objects
+ * occording to the strings specifications
+ */
 public class VariableFactory {
 
     private static final String LEGAL_PATTERN = "(final\\s+)?\\s*(int|double|String|boolean|char)\\s+(.*)" +
@@ -94,9 +97,8 @@ public class VariableFactory {
     }
 
     /**
-     *
-     * @param var
-     * @return
+     * @param var - the variable to check
+     * @return - true if the variable is a final variable
      */
     private boolean isFinal(String var){ return var.startsWith("final "); }
 

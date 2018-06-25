@@ -1,5 +1,8 @@
 package oop.ex6;
 
+/**
+ * a class representing the variable objects
+ */
 public class Variable {
     String varType;
     String name;

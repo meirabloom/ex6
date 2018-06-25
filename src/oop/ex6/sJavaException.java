@@ -1,5 +1,8 @@
 package oop.ex6;
 
+/**
+ * receives a string specifying the reason for the error, and throws an exception with the explanation message
+ */
 public class sJavaException extends Exception {
 
     /**

@@ -9,6 +9,9 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * A class representing the condition block objects. (if and while loops)
+ */
 public class ConditionBlock extends Block {
 
     //* constants *//

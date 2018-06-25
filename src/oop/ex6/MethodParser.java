@@ -5,6 +5,11 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * receives a linked list of strings representing the Method block, ensures the method has a valid
+ * signature and ends properly, and extracts the variables within the method scope. if it is a call to the
+ * method, checks the validity of the call
+ */
 public class MethodParser {
 
     private LinkedList<String> methodLines;

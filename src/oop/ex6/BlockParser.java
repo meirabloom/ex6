@@ -54,7 +54,7 @@ public class BlockParser {
     }
 
     /**
-     * read all the blocks in the file, each read creting all the sub-blocks abd reading them as well.
+     * read all the blocks in the file, each read creating all the sub-blocks abd reading them as well.
      * @param lines - lines of the block
      * @param block - current block
      * @throws sJavaException
