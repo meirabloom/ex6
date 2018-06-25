@@ -9,8 +9,8 @@ InitialParser.java - Receives a file and reads it line by line, adding each line
                      excluding comment lines and empty lines.
 BlockParser.java - A class that iterates over the linked list of code string lines and parses them into
                    block objects according to their type
-GlobalBlock.java - A class following the singleton principle, that represents the main block in the code to be
-                   verified. It's variables are global variables.
+GlobalBlock.java - A class that represents the main block in the code to be verified. It's variables are
+                   global variables.
 Block.java - An abstract class representing a a block of code- the first line in the block contains an opening
              curly bracket, the last line is simply a closing curly bracket, and everything in the block is
              the scope.
@@ -39,14 +39,14 @@ and "1" is printed. If the verifier finishes it's run uninterrupted, the code co
 pronounced legal by "0" being printed.
 the verifying process:
 The code is sent to the Initial parser class, which reads the code and adds each line that isn't empty/ not a
-comment line, into a linked list of strings. A singleton global block object is created with the list of
-lines, and the Block parser class is instantiated with the global block. the block parser iterates over the
-global block line and and parses them into objects according to their type. its main method is the readBlock
-method. At first it parses the block into sections, each block beginning and ending with curly brackets. each
-block is added into a queue to be read later. Then each block is read, by recursively  reading the line and
-adding the sub-blocks into the queue. Each line is read and the line type is recognized. variables are kept
-and sent to the variable factory. once a block becomes an object it is removed from the queue.
-after all the blocks have been validated, the verifier has finished its run and
+comment line, into a linked list of strings. A global block object is created with the list of lines, and the
+Block parser class is instantiated with the global block. the block parser iterates over the global block line
+and and parses them into objects according to their type. its main method is the readBlock method. At first it
+parses the block into sections, each block beginning and ending with curly brackets. each block is added into
+a queue to be read later. Then each block is read, by recursively  reading the line and adding the sub-blocks
+into the queue. Each line is read and the line type is recognized. variables are kept and sent to the variable
+factory. once a block becomes an object it is removed from the queue. after all the blocks have been
+validated, the verifier has finished its run and "0" is printed.
 
 
 =============================
@@ -59,12 +59,11 @@ error, and throws an exception with the message explanation
 
 2) How would you modify your code to add new types of variables (e.g float)?
 
+if we were to add new types of variables, the main modification would be allowing additional cases in the
+variable factory- adding more options to the SWITCH CASE (new regexes).
 our code would be hard to modify in order support new types of variables, and in the course of the project we
 learned for next time to try and make the code as modular as possible from the beginning, in order to support
 changes and have a cohesive project.
-if we were to add new types of variables, the main modification would be allowing additional cases in the
-variable factory- adding more options to the SWITCH CASE (new regexes).
-
 
 3) For the following two features your program does not currently support, describe which
 modifications/extensions you would have had to make in your code in order to support them. briefly describe
@@ -94,7 +93,7 @@ method can be nested in the class as well as the global parent.
 
 
  "\\s*(void)\\s+([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
- - detemines wether the line is a method signature
+ - determines whether the line is a method signature
 
 
 
