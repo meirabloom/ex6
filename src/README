@@ -1,4 +1,4 @@
-abigail.sasporte
+abigail.s
 meira.bloom
 
 =============================
@@ -28,6 +28,7 @@ sJavaException.java - receives a string specifying the reason for the error, and
                       explanation message
 
 
+
 =============================================
 =     Design and Implementation details     =
 =============================================
@@ -42,10 +43,10 @@ comment line, into a linked list of strings. A singleton global block object is 
 lines, and the Block parser class is instantiated with the global block. the block parser iterates over the
 global block line and and parses them into objects according to their type. its main method is the readBlock
 method. At first it parses the block into sections, each block beginning and ending with curly brackets. each
-block is added into a queue to be read later. Then each block is read, recu
-
-
-
+block is added into a queue to be read later. Then each block is read, by recursively  reading the line and
+adding the sub-blocks into the queue. Each line is read and the line type is recognized. variables are kept
+and sent to the variable factory. once a block becomes an object it is removed from the queue.
+after all the blocks have been validated, the verifier has finished its run and
 
 
 =============================
@@ -58,12 +59,42 @@ error, and throws an exception with the message explanation
 
 2) How would you modify your code to add new types of variables (e.g float)?
 
+our code would be hard to modify in order support new types of variables, and in the course of the project we
+learned for next time to try and make the code as modular as possible from the beginning, in order to support
+changes and have a cohesive project.
+if we were to add new types of variables, the main modification would be allowing additional cases in the
+variable factory- adding more options to the SWITCH CASE (new regexes).
+
+
 3) For the following two features your program does not currently support, describe which
 modifications/extensions you would have had to make in your code in order to support them. briefly describe
 what classes you would add, which methods you would add to existing classes, and which classes you would
 modify
 
+different method types:
+updating the validation of method signature and ending to include int/double/boolean and such (by updating the
+regex). In addition, when verifying the method in the Method class, add a function that ensures that the type
+of method matches the methods return value. (for example, a method int foo() must return a valid int), similar
+to the way we ensured the variable type matches the type of value we wish to assign to the variable.
+
+
+classes:
+adding a new class called ClassBlock, representing the class object, with the following methods:
+a method to verify the class signature is valid, using regexes. the variables of the class will be extracted
+in a manner similar to their extraction for the method and condition blocks, during the parsing of blocks in
+BlockParser. the switch method in blockParser will be modified to recognize the class signature and create a
+class block object (adding a new case with a new regex matching the class signature). additional changes: a
+method can be nested in the class as well as the global parent.
+
+
 4) Describe two of the main regular expressions you used in your code
+
+ "\\s*(final\\s+)?\\s*(int|double|String|boolean|char)\\s*(.*)(;)\\s*";
+ - determines whether the line is a variable signature
+
+
+ "\\s*(void)\\s+([a-zA-Z]\\w*)\\s*\\((.*)\\)\\s*\\{\\s*";
+ - detemines wether the line is a method signature
 
 
 
